@@ -1,0 +1,161 @@
+/* =========================================
+   Animations — Confetti, Particles, Effects
+   ========================================= */
+
+/* --- Confetti --- */
+.confetti-container {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: var(--z-confetti);
+  overflow: hidden;
+}
+.confetti-piece {
+  position: absolute;
+  width: 12px; height: 12px;
+  top: -20px;
+  animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg) scale(0.3); opacity: 0; }
+}
+
+/* --- Floating Hearts --- */
+.floating-heart {
+  position: fixed;
+  font-size: 1.5rem;
+  pointer-events: none;
+  z-index: var(--z-confetti);
+  animation: heartFloat 2s ease-out forwards;
+}
+@keyframes heartFloat {
+  0% { transform: translateY(0) scale(0); opacity: 1; }
+  50% { transform: translateY(-80px) scale(1.2); opacity: 0.8; }
+  100% { transform: translateY(-160px) scale(0.5); opacity: 0; }
+}
+
+/* --- Star Burst --- */
+.star-burst {
+  position: fixed;
+  pointer-events: none;
+  z-index: var(--z-confetti);
+  font-size: 1.2rem;
+  animation: starBurst 1s ease-out forwards;
+}
+@keyframes starBurst {
+  0% { transform: scale(0) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.5) rotate(180deg); opacity: 0.8; }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+/* --- Pulse Ring --- */
+.pulse-ring {
+  position: absolute;
+  border: 3px solid var(--color-primary);
+  border-radius: 50%;
+  animation: pulseRing 1s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes pulseRing {
+  0% { width: 0; height: 0; opacity: 1; }
+  100% { width: 100px; height: 100px; opacity: 0; margin: -50px; }
+}
+
+/* --- Shimmer Effect --- */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 3s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* --- Glow Pulse --- */
+.glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 5px rgba(255,105,180,0.3); }
+  50% { box-shadow: 0 0 20px rgba(255,105,180,0.6), 0 0 40px rgba(255,105,180,0.3); }
+}
+
+/* --- Bounce In --- */
+.bounce-in { animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes bounceIn {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* --- Slide transitions --- */
+.slide-up { animation: slideUp 0.4s ease; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.slide-down { animation: slideDown 0.4s ease; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+.slide-left { animation: slideLeft 0.4s ease; }
+@keyframes slideLeft { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+
+/* --- Wiggle --- */
+.wiggle { animation: wiggle 0.5s ease; }
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+  75% { transform: rotate(-3deg); }
+}
+
+/* --- Rainbow text --- */
+.rainbow-text {
+  background: linear-gradient(90deg, #FF69B4, #FF6B6B, #F39C12, #2ECC71, #3498DB, #9B59B6, #FF69B4);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: rainbowShift 4s linear infinite;
+}
+@keyframes rainbowShift { to { background-position: 200% center; } }
+
+/* --- Points Float Up --- */
+.points-float {
+  position: fixed;
+  font-family: var(--font-display);
+  font-weight: var(--weight-extrabold);
+  font-size: var(--text-2xl);
+  color: var(--color-gold);
+  pointer-events: none;
+  z-index: var(--z-confetti);
+  animation: pointsFloat 1.5s ease-out forwards;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+@keyframes pointsFloat {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  20% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+  100% { transform: translateY(-100px) scale(0.8); opacity: 0; }
+}
+
+/* --- Stagger children --- */
+.stagger-children > * {
+  opacity: 0;
+  animation: slideUp 0.4s ease forwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.4s; }

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="2. sınıf öğrencileri için oyunlaştırılmış eğitim uygulaması. Matematik, İngilizce, Türkçe ve Hayat Bilgisi dersleri.">
+  <title>🧚 Sihirli Öğrenme Ormanı</title>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Magic Background -->
+    <div class="magic-bg">
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+    </div>
+    <div id="sparkles" class="sparkle-container"></div>
+
+    <!-- ========== WELCOME SCREEN ========== -->
+    <div id="screen-welcome" class="screen active">
+      <div class="welcome-content">
+        <div class="welcome-mascot">🧚‍♀️</div>
+        <h1 class="welcome-title">Sihirli Öğrenme<br>Ormanı</h1>
+        <p class="welcome-subtitle">Merhaba! Sihirli ormana hoş geldin. Burada öğrenmek çok eğlenceli! 🌈✨</p>
+        <div class="flex flex-col gap-4 w-full" style="max-width:360px">
+          <input type="text" id="player-name" class="input" placeholder="Adını yaz... 💫" maxlength="20" onkeydown="if(event.key==='Enter')App.startNewProfile()">
+          <button class="btn btn-primary btn-xl w-full shimmer" onclick="App.startNewProfile()">
+            🚀 Maceraya Başla!
+          </button>
+          <div id="welcome-existing" style="display:none;margin-top:var(--space-4)">
+            <button class="btn btn-ghost w-full" onclick="App.goToProfileSelect()">
+              👋 Mevcut Profil ile Devam Et
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== PROFILE SELECT SCREEN ========== -->
+    <div id="screen-profile-select" class="screen">
+      <div class="container" style="max-width:600px;width:100%">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.showScreen('welcome')">← Geri</button>
+        </div>
+        <h2 class="text-center" style="margin-bottom:var(--space-6)">👋 Kim Oynayacak?</h2>
+        <div id="profiles-list" class="flex flex-col gap-4 stagger-children"></div>
+        <button class="btn btn-ghost w-full" style="margin-top:var(--space-6)" onclick="App.showScreen('welcome')">
+          ➕ Yeni Profil Oluştur
+        </button>
+      </div>
+    </div>
+
+    <!-- ========== DASHBOARD SCREEN ========== -->
+    <div id="screen-dashboard" class="screen">
+      <div class="container" style="max-width:900px;width:100%">
+        <!-- Top Bar -->
+        <div class="top-bar">
+          <div class="flex items-center gap-3">
+            <div id="dash-avatar" class="avatar-display small" onclick="App.openAvatarEditor()" style="cursor:pointer">🧚</div>
+            <span id="dash-level" class="avatar-level-badge" style="position:static">1</span>
+          </div>
+          <div class="stats">
+            <div class="stat-item"><span class="stat-icon">⭐</span><span id="dash-stars">0</span></div>
+            <div class="stat-item"><span class="stat-icon">🔥</span><span id="dash-streak">0</span></div>
+            <div class="stat-item"><span class="stat-icon">💎</span><span id="dash-points">0</span></div>
+            <button class="btn btn-icon btn-ghost btn-sm" id="sound-toggle" onclick="App.toggleSound()">
+              <span id="sound-toggle-icon">🔊</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Greeting -->
+        <div class="dashboard-greeting">
+          <h2 id="dash-greeting" class="greeting-text">Merhaba! ✨</h2>
+        </div>
+
+        <!-- Daily Quests -->
+        <div class="daily-quest-panel" style="margin-bottom:var(--space-6)">
+          <h4 style="margin-bottom:var(--space-3)">📋 Günlük Görevler</h4>
+          <div id="daily-quests"></div>
+        </div>
+
+        <!-- Subject Cards -->
+        <h3 style="margin-bottom:var(--space-4)">🗺️ Ders Dünyaları</h3>
+        <div class="grid grid-2 gap-4 stagger-children" style="margin-bottom:var(--space-6)">
+          <div class="card-subject math" onclick="App.openSubject('math')">
+            <div class="subject-icon">🔢</div>
+            <div class="subject-title">Matematik Adası</div>
+            <div class="progress-bar small" id="dash-progress-math" style="max-width:160px"><div class="progress-fill" style="width:0%;background:rgba(255,255,255,0.5)"></div></div>
+            <div class="subject-subtitle" id="dash-progress-math-label">0%</div>
+          </div>
+          <div class="card-subject english" onclick="App.openSubject('english')">
+            <div class="subject-icon">🏰</div>
+            <div class="subject-title">İngilizce Kalesi</div>
+            <div class="progress-bar small" id="dash-progress-english" style="max-width:160px"><div class="progress-fill" style="width:0%;background:rgba(255,255,255,0.5)"></div></div>
+            <div class="subject-subtitle" id="dash-progress-english-label">0%</div>
+          </div>
+          <div class="card-subject turkish" onclick="App.openSubject('turkish')">
+            <div class="subject-icon">📖</div>
+            <div class="subject-title">Türkçe Bahçesi</div>
+            <div class="progress-bar small" id="dash-progress-turkish" style="max-width:160px"><div class="progress-fill" style="width:0%;background:rgba(255,255,255,0.5)"></div></div>
+            <div class="subject-subtitle" id="dash-progress-turkish-label">0%</div>
+          </div>
+          <div class="card-subject life" onclick="App.openSubject('life')">
+            <div class="subject-icon">🌍</div>
+            <div class="subject-title">Hayat Bilgisi Köyü</div>
+            <div class="progress-bar small" id="dash-progress-life" style="max-width:160px"><div class="progress-fill" style="width:0%;background:rgba(255,255,255,0.5)"></div></div>
+            <div class="subject-subtitle" id="dash-progress-life-label">0%</div>
+          </div>
+        </div>
+
+        </div>
+
+        <!-- Study Plan / Recommendations -->
+        <div id="dash-study-plan-container" class="hidden" style="margin: var(--space-6) auto; max-width: 600px;">
+           <div class="card" style="background: linear-gradient(135deg, #FFF, #F0F9FF); border: 2px solid #BAE6FD; padding: var(--space-4); position: relative; overflow: visible;">
+              <div style="position: absolute; left: -20px; top: -20px; font-size: 3rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">🦊</div>
+              <div style="margin-left: var(--space-8);">
+                 <h3 style="font-size: var(--text-lg); color: #0369A1; margin-bottom: var(--space-1);">Benito'nun Tavsiyesi 💡</h3>
+                 <p id="dash-study-plan-text" style="font-size: var(--text-sm); color: #0C4A6E; margin-bottom: var(--space-3);">Görünüşe göre bazı konularda biraz daha pratik yapabiliriz!</p>
+                 <div id="dash-study-plan-list" class="flex flex-col gap-2">
+                    <!-- Dinamik butonlar buraya gelecek -->
+                 </div>
+              </div>
+           </div>
+        </div>
+
+        <!-- Quest Code / Homework Box -->
+        <div class="card" style="margin: var(--space-6) auto; max-width: 600px; background: rgba(255,255,255,0.8); border: 2px dashed var(--color-primary-light); padding: var(--space-4);">
+          <h3 style="font-size: var(--text-lg); color: var(--color-primary); margin-bottom: var(--space-2);"><span class="stat-icon">🏫</span> Öğretmen Görev Kodu</h3>
+          <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-3);">Öğretmeninin verdiği kodu girerek doğrudan o haftanın ödevine ışınlan!</p>
+          <div class="flex gap-2 justify-center">
+            <input type="text" id="quest-code-input" class="input" placeholder="Örn: ENG-07" style="max-width: 200px; text-transform: uppercase;">
+            <button class="btn btn-primary" onclick="App.checkQuestCode()">Hemen Git 🚀</button>
+          </div>
+          <div id="quest-code-error" style="color:var(--color-wrong); font-size:var(--text-sm); margin-top:var(--space-2); display:none;">Kod bulunamadı, kontrol et!</div>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="flex justify-center gap-4 flex-wrap" style="margin-bottom:var(--space-8)">
+          <button class="btn btn-gold" onclick="App.showScreen('badges')">🏅 Rozetlerim</button>
+          <button class="btn btn-ghost" onclick="App.goToProfileSelect()">👤 Profil Değiştir</button>
+          <button class="btn btn-ghost" onclick="App.openParentPanel()">🔒 Ebeveyn Paneli</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SUBJECT SCREEN ========== -->
+    <div id="screen-subject" class="screen">
+      <div class="container" style="max-width:700px;width:100%">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.goToDashboard()">← Ana Sayfa</button>
+          <div class="stats">
+            <div class="stat-item"><span class="stat-icon">⭐</span><span id="subject-stars">0</span></div>
+          </div>
+        </div>
+        <div class="text-center" style="margin-bottom:var(--space-6)">
+          <div id="subject-icon" style="font-size:3rem;margin-bottom:var(--space-2)">🔢</div>
+          <h2 id="subject-title" class="greeting-text">Matematik Adası</h2>
+        </div>
+        
+        <h3 style="color: var(--color-text-secondary); margin-bottom: var(--space-2); font-family: var(--font-display);">🍁 1. Dönem Konuları</h3>
+        <div id="units-list-term1" class="flex flex-col gap-4 stagger-children" style="margin-bottom:var(--space-6)"></div>
+        
+        <h3 style="color: var(--color-text-secondary); margin-bottom: var(--space-2); font-family: var(--font-display);">🌸 2. Dönem Konuları</h3>
+        <div id="units-list-term2" class="flex flex-col gap-4 stagger-children"></div>
+        
+        <div class="text-center" style="margin-top:var(--space-8)">
+          <button class="btn btn-ghost" onclick="App.goToDashboard()">← Ana Sayfaya Dön</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== UNIT INTRO SCREEN ========== -->
+    <div id="screen-intro" class="screen">
+      <div class="container" style="max-width:600px;width:100%;text-align:center">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.showScreen('subject')">← Geri</button>
+        </div>
+        
+        <div style="margin-top:var(--space-4);margin-bottom:var(--space-6)">
+          <div class="welcome-mascot" id="intro-mascot" style="font-size:5rem;margin-bottom:var(--space-2)">🧚‍♀️</div>
+          <h2 id="intro-unit-title" class="rainbow-text" style="font-size:var(--text-3xl)">Ünite Adı</h2>
+        </div>
+
+        <div class="card" style="margin-bottom:var(--space-8);position:relative;background:var(--color-bg-alt);border:2px dashed var(--color-primary-light);">
+          <div style="font-size:var(--text-xl);line-height:1.6;font-family:var(--font-display)" id="intro-text">
+            Merhaba! Bu derste harika şeyler öğreneceğiz. Başlamaya hazır mısın?
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-xl w-full shimmer" onclick="App.startLessonFromIntro()">
+          ✨ Hazırım, Başlayalım!
+        </button>
+      </div>
+    </div>
+
+    <!-- ========== LESSON SCREEN ========== -->
+    <div id="screen-lesson" class="screen">
+      <div class="container" style="max-width:600px;width:100%;text-align:center">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.quitQuiz()">← Çık</button>
+          <div style="font-family:var(--font-display);font-weight:600;flex:1" id="lesson-header-title">Öğrenme Zamanı</div>
+          <div style="width:50px"></div>
+        </div>
+        
+        <div class="lesson-mascot" id="lesson-top-mascot" style="font-size:5rem;margin:var(--space-2) 0; animation: float 3s ease-in-out infinite;">🧚‍♀️</div>
+        
+        <div class="card lesson-card" style="margin-bottom:var(--space-6); background:var(--color-bg-alt); border:3px solid var(--color-primary-light);">
+          <h2 id="lesson-slide-title" class="rainbow-text" style="margin-bottom:var(--space-4); font-size:var(--text-2xl)">Konu Başlığı</h2>
+          <img id="lesson-slide-image" class="lesson-slide-image hidden" src="" alt="Görsel Öğrenme">
+          <div id="lesson-slide-content" style="font-size:var(--text-xl); line-height:1.6; font-family:var(--font-display);">
+             Burası öğrenme metni...
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <button id="lesson-prev-btn" class="btn btn-secondary w-full hidden" onclick="App.prevLessonSlide()">← Geri</button>
+          <button id="lesson-next-btn" class="btn btn-primary w-full shimmer" onclick="App.nextLessonSlide()">İleri →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== BREAK SCREEN ========== -->
+    <div id="screen-break" class="screen">
+      <div class="container" style="max-width:600px;width:100%;text-align:center">
+         <div class="welcome-mascot" id="break-mascot" style="font-size:6rem; margin-top:var(--space-8); margin-bottom:var(--space-4); animation: float 3s ease-in-out infinite;">🧚‍♀️</div>
+         <h1 class="rainbow-text" style="font-size:3rem; margin-bottom:var(--space-4)">Mola Vakti! 🍃</h1>
+         <div class="card" style="margin-bottom:var(--space-8); font-size:var(--text-xl); line-height:1.6; background:var(--color-bg-alt);">
+            "Haydi şimdi mola vakti! 🌸 Yarın görüşürüz, beni çok özle! Derslerine harika çalıştın but biraz da oyun oynamayı unutma. Anne ve babanın da sözünü dinle aman! 😄"
+         </div>
+         <button class="btn btn-primary btn-xl w-full shimmer" onclick="App.takeBreakDone()">
+           Tamam, dinleniyorum! 🛋️
+         </button>
+      </div>
+    </div>
+
+    <!-- ========== QUIZ SCREEN ========== -->
+    <div id="screen-quiz" class="screen">
+      <div class="container" style="max-width:700px;width:100%">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.quitQuiz()">✕ Çık</button>
+          <div style="text-align:center;flex:1">
+            <div id="quiz-subject-label" style="font-size:var(--text-sm);color:var(--color-text-secondary)">🔢 Matematik</div>
+            <div id="quiz-unit-label" style="font-family:var(--font-display);font-weight:600">Ünite</div>
+          </div>
+          <div class="stats">
+            <div class="stat-item"><span class="stat-icon">⭐</span><span id="quiz-stars-count">0</span></div>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div style="margin-bottom:var(--space-4)">
+          <div class="flex justify-between items-center" style="margin-bottom:var(--space-2)">
+            <span id="quiz-counter" class="question-counter">1 / 10</span>
+          </div>
+          <div class="progress-bar small">
+            <div class="progress-fill" id="quiz-progress-fill" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- Question -->
+        <div class="question-area">
+          <img id="quiz-question-image" class="quiz-question-image hidden" src="" alt="Soru Görseli">
+          <div class="question-text" id="quiz-question">Soru...</div>
+          
+          <!-- Classic Multiple Choice -->
+          <div class="options-grid" id="quiz-options"></div>
+          
+          <!-- Image Options Choice (NEW) -->
+          <div class="image-options-grid hidden" id="quiz-image-options"></div>
+          
+          <!-- Fill in the blanks -->
+          <div class="fill-blank-area hidden" id="quiz-fill-blank" style="text-align:center; padding:var(--space-4) 0">
+              <input type="text" id="fill-blank-input" class="input" placeholder="Cevabı yaz..." style="text-align:center; font-size:var(--text-2xl); width:80%; max-width:300px; margin:0 auto var(--space-6) auto; border-width:3px;" autocomplete="off" onkeydown="if(event.key==='Enter'){ if(App.quizState && App.quizState.answered) App.nextQuestion(); else App.checkFillBlank(); }">
+              <button class="btn btn-primary btn-lg w-full shimmer" onclick="App.checkFillBlank()">Cevabı Kontrol Et ✨</button>
+          </div>
+
+          <!-- Matching / Drag-drop alternative -->
+          <div class="match-grid hidden" id="quiz-match-options"></div>
+
+          <div id="quiz-feedback"></div>
+          <div id="quiz-hint"></div>
+          <div class="text-center" style="margin-top:var(--space-4)">
+            <button class="btn btn-primary btn-lg hidden" id="quiz-next-btn" onclick="App.nextQuestion()">
+              Sonraki Soru →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== QUIZ RESULT SCREEN ========== -->
+    <div id="screen-quiz-result" class="screen">
+      <div class="container" style="max-width:500px;width:100%;text-align:center">
+        <h1 id="result-title" style="margin-top:var(--space-8);margin-bottom:var(--space-2)">🎉 Tebrikler!</h1>
+        <p id="result-unit-name" style="color:var(--color-text-secondary);margin-bottom:var(--space-6)">🔢 Doğal Sayılar</p>
+
+        <div class="stars justify-center" id="result-stars" style="margin-bottom:var(--space-6);justify-content:center">
+          <span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span>
+        </div>
+
+        <div id="result-level-up" class="hidden" style="margin-bottom:var(--space-4)"></div>
+
+        <div class="card" style="margin-bottom:var(--space-6)">
+          <div class="grid grid-2 gap-4">
+            <div><div style="font-size:var(--text-sm);color:var(--color-text-secondary)">Toplam Puan</div><div style="font-size:var(--text-2xl);font-weight:800;color:var(--color-gold)" id="result-score">0</div></div>
+            <div><div style="font-size:var(--text-sm);color:var(--color-text-secondary)">Süre</div><div style="font-size:var(--text-2xl);font-weight:800" id="result-time">0:00</div></div>
+            <div><div style="font-size:var(--text-sm);color:var(--color-text-secondary)">✅ Doğru</div><div style="font-size:var(--text-2xl);font-weight:800;color:var(--color-emerald)" id="result-correct">0</div></div>
+            <div><div style="font-size:var(--text-sm);color:var(--color-text-secondary)">❌ Yanlış</div><div style="font-size:var(--text-2xl);font-weight:800;color:var(--color-coral)" id="result-wrong">0</div></div>
+          </div>
+          <div style="margin-top:var(--space-4);padding-top:var(--space-4);border-top:1px solid var(--color-border)">
+            <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">🔥 En Yüksek Kombo</div>
+            <div style="font-size:var(--text-xl);font-weight:800;color:var(--color-gold)" id="result-combo">0x</div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-3">
+          <button class="btn btn-primary btn-lg w-full" onclick="App.retryQuiz()">🔄 Tekrar Dene</button>
+          <button class="btn btn-secondary btn-lg w-full" onclick="App.goToSubjectFromResult()">📚 Diğer Üniteler</button>
+          <button class="btn btn-ghost w-full" onclick="App.goToDashboard()">🏠 Ana Sayfa</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== BADGES SCREEN ========== -->
+    <div id="screen-badges" class="screen">
+      <div class="container" style="max-width:800px;width:100%">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.goToDashboard()">← Ana Sayfa</button>
+        </div>
+        <div class="text-center" style="margin-bottom:var(--space-6)">
+          <h2>🏅 Rozet Koleksiyonum</h2>
+          <p style="color:var(--color-text-secondary)">
+            <span id="badges-earned-count">0</span> / <span id="badges-total-count">0</span> rozet kazanıldı
+          </p>
+        </div>
+        <div id="badges-grid" class="grid grid-3 gap-4 stagger-children"></div>
+        <div class="text-center" style="margin-top:var(--space-8)">
+          <button class="btn btn-ghost" onclick="App.goToDashboard()">← Ana Sayfaya Dön</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== PARENT PANEL SCREEN ========== -->
+    <div id="screen-parent" class="screen">
+      <div class="container" style="max-width:800px;width:100%">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.goToDashboard()">← Ana Sayfa</button>
+          <h3>🔒 Ebeveyn Paneli</h3>
+          <div></div>
+        </div>
+
+        <div class="card" style="margin-bottom:var(--space-6)">
+          <h4 style="margin-bottom:var(--space-4)">👤 <span id="parent-name">-</span></h4>
+          <div class="grid grid-3 gap-4" style="text-align:center">
+            <div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">Seviye</div>
+              <div style="font-size:var(--text-2xl);font-weight:800" id="parent-level">0</div>
+            </div>
+            <div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">Toplam Puan</div>
+              <div style="font-size:var(--text-2xl);font-weight:800;color:var(--color-gold)" id="parent-total-points">0</div>
+            </div>
+            <div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">Yıldızlar</div>
+              <div style="font-size:var(--text-2xl);font-weight:800;color:var(--color-gold)" id="parent-total-stars">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:var(--space-6)">
+          <h4 style="margin-bottom:var(--space-4)">📊 İstatistikler</h4>
+          <div class="grid grid-2 gap-4" style="text-align:center">
+            <div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">Toplam Soru</div>
+              <div style="font-size:var(--text-xl);font-weight:800" id="parent-total-answered">0</div>
+            </div>
+            <div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">Doğruluk</div>
+              <div style="font-size:var(--text-xl);font-weight:800;color:var(--color-emerald)" id="parent-accuracy">0%</div>
+            </div>
+            <div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">Tahmini Süre (Dk)</div>
+              <div style="font-size:var(--text-xl);font-weight:800;color:var(--color-primary)" id="parent-est-time">0</div>
+            </div>
+            <div>
+              <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">En Çok Zorlanılan</div>
+              <div style="font-size:var(--text-md);font-weight:800;color:var(--color-coral)" id="parent-weak-subject">-</div>
+            </div>
+          </div>
+          <div style="margin-top:var(--space-4);text-align:center;padding-top:var(--space-4);border-top:1px solid var(--color-border)">
+            <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">🔥 Günlük Giriş Serisi</div>
+            <div style="font-size:var(--text-2xl);font-weight:800;color:var(--color-coral)" id="parent-streak">0</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:var(--space-6)">
+          <h4 style="margin-bottom:var(--space-4)">⚙️ Ayarlar</h4>
+          <div class="flex flex-col gap-4">
+             <div class="flex justify-between items-center" style="padding:var(--space-2) 0; border-bottom:1px solid var(--color-border)">
+                <span>🔊 Ses Efektleri ve Konuşma</span>
+                <button class="btn btn-ghost btn-sm" id="parent-sound-btn" onclick="App.toggleSound()">Açık/Kapalı</button>
+             </div>
+             <div class="flex justify-between items-center" style="padding:var(--space-2) 0">
+                <div class="flex flex-col">
+                  <span>🔒 Ebeveyn PIN Kodu</span>
+                  <span style="font-family:var(--font-display);font-weight:bold;color:var(--color-primary)" id="parent-pin-display">1234</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="App.changeParentPin()">Değiştir</button>
+             </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:var(--space-6); border: 1px solid #FFEBEB; background: #FFF8F8">
+          <h4 style="margin-bottom:var(--space-4); color:var(--color-wrong)">⚠️ Tehlikeli Bölge</h4>
+          <div class="flex flex-col gap-3">
+             <button class="btn btn-sm btn-ghost" style="color:var(--color-wrong); border:1px solid #FFDADA; width:100%" onclick="App.resetStudentProgress()">Verileri Sıfırla (Puan, İlerleme)</button>
+             <button class="btn btn-sm btn-ghost" style="color:var(--color-wrong); width:100%" onclick="App.deleteCurrentProfile()">Profili Tamamen Sil 🗑️</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:var(--space-6)">
+          <h4 style="margin-bottom:var(--space-4)">📂 Ünite Bazlı Başarı</h4>
+          <div id="parent-units-detail" class="flex flex-col gap-3" style="text-align:left; max-height: 300px; overflow-y: auto; padding-right: 5px;">
+             <!-- Dinamik ünite listesi buraya gelecek -->
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:var(--space-6)">
+          <h4 style="margin-bottom:var(--space-4)">📈 Ders İlerlemeleri</h4>
+          <div class="flex flex-col gap-4">
+            <div>
+              <div class="flex justify-between" style="margin-bottom:4px"><span>🔢 Matematik</span><span id="parent-progress-math-label">0%</span></div>
+              <div class="progress-bar math" id="parent-progress-math"><div class="progress-fill" style="width:0%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between" style="margin-bottom:4px"><span>🏰 İngilizce</span><span id="parent-progress-english-label">0%</span></div>
+              <div class="progress-bar english" id="parent-progress-english"><div class="progress-fill" style="width:0%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between" style="margin-bottom:4px"><span>📖 Türkçe</span><span id="parent-progress-turkish-label">0%</span></div>
+              <div class="progress-bar turkish" id="parent-progress-turkish"><div class="progress-fill" style="width:0%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between" style="margin-bottom:4px"><span>🌍 Hayat Bilgisi</span><span id="parent-progress-life-label">0%</span></div>
+              <div class="progress-bar life" id="parent-progress-life"><div class="progress-fill" style="width:0%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button class="btn btn-ghost" onclick="App.goToDashboard()">← Ana Sayfaya Dön</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== MODALS ========== -->
+
+    <!-- Avatar Editor Modal -->
+    <div id="avatar-modal" class="modal-overlay hidden">
+      <div class="modal">
+        <button class="modal-close" onclick="App.closeAvatarModal()">✕</button>
+        <h3 style="margin-bottom:var(--space-4)">🎨 Avatarını Seç</h3>
+        <div id="avatar-preview" class="avatar-display large" style="margin:0 auto var(--space-6) auto">🧚</div>
+        <h4 style="margin-bottom:var(--space-3)">Karakter</h4>
+        <div id="avatar-options" class="flex flex-wrap justify-center gap-2" style="margin-bottom:var(--space-6)"></div>
+        <h4 style="margin-bottom:var(--space-3)">Arka Plan</h4>
+        <div id="avatar-bg-options" class="flex flex-wrap justify-center gap-2" style="margin-bottom:var(--space-4)"></div>
+        <button class="btn btn-primary w-full" onclick="App.closeAvatarModal()">✅ Tamam</button>
+      </div>
+    </div>
+
+    <!-- Badge Earned Modal -->
+    <div id="badge-modal" class="modal-overlay hidden" onclick="App.closeBadgeModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div style="font-size:5rem;margin-bottom:var(--space-4)" id="badge-modal-icon">🏅</div>
+        <h2 style="margin-bottom:var(--space-2)" class="rainbow-text">Yeni Rozet!</h2>
+        <h3 id="badge-modal-name" style="margin-bottom:var(--space-2)">Rozet Adı</h3>
+        <p id="badge-modal-desc" style="color:var(--color-text-secondary);margin-bottom:var(--space-6)">Açıklama</p>
+        <button class="btn btn-gold w-full" onclick="App.closeBadgeModal()">🎉 Harika!</button>
+      </div>
+    </div>
+
+    <!-- Parent PIN Modal -->
+    <div id="parent-pin-modal" class="modal-overlay hidden">
+      <div class="modal">
+        <button class="modal-close" onclick="App.closeParentPin()">✕</button>
+        <h3 style="margin-bottom:var(--space-2)">🔒 Ebeveyn Girişi</h3>
+        <p style="color:var(--color-text-secondary);margin-bottom:var(--space-6)">4 haneli PIN kodunu girin</p>
+        <div class="pin-input-group" style="margin-bottom:var(--space-4)">
+          <input type="tel" class="pin-digit" maxlength="1" oninput="App.handlePinInput(this,0)">
+          <input type="tel" class="pin-digit" maxlength="1" oninput="App.handlePinInput(this,1)">
+          <input type="tel" class="pin-digit" maxlength="1" oninput="App.handlePinInput(this,2)">
+          <input type="tel" class="pin-digit" maxlength="1" oninput="App.handlePinInput(this,3)">
+        </div>
+        <p id="pin-error" class="hidden" style="color:var(--color-wrong);font-size:var(--text-sm)">❌ Yanlış PIN. Tekrar deneyin.</p>
+        <p style="font-size:var(--text-xs);color:var(--color-text-light);margin-top:var(--space-4)">Varsayılan PIN: 1234</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data/math-questions.js"></script>
+  <script src="js/data/english-questions.js"></script>
+  <script src="js/data/turkish-questions.js"></script>
+  <script src="js/data/life-questions.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
