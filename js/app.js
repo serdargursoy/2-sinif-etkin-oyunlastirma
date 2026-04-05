@@ -74,7 +74,7 @@ const App = {
   createSparkles() {
     const container = document.getElementById('sparkles');
     if (!container) return;
-    const symbols = ['✨','⭐','💫','🌟','✦','✧'];
+    const symbols = ['✨','⭐','💫','🌟','🌈','💖','🌸','🫧'];
     for (let i = 0; i < 25; i++) {
       const span = document.createElement('span');
       span.className = 'sparkle';
