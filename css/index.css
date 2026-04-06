@@ -251,15 +251,18 @@ h4 { font-size: var(--text-xl); }
 .screen {
   display: none;
   min-height: 100vh;
+  width: 100%;
   padding: var(--space-6);
   position: relative;
+  overflow-y: auto; /* Allow screen-specific scrolling if needed */
   animation: screenFadeIn 0.4s ease;
 }
 
 .screen.active {
-  display: flex;
+  display: flex !important; /* Force flex when active */
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start; /* Ensure content starts from the top */
 }
 
 @keyframes screenFadeIn {
