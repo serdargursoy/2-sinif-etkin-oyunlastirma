@@ -102,18 +102,26 @@ const App = {
   },
 
   showScreen(screenId) {
-    SoundEngine.navigate();
-    // Hide all screens
-    document.querySelectorAll('.screen').forEach(s => {
+    if (SoundEngine) SoundEngine.navigate();
+    
+    // Deactivate ALL screens thoroughly
+    const allScreens = document.querySelectorAll('.screen');
+    allScreens.forEach(s => {
       s.classList.remove('active');
+      // Force scroll reset for each screen if they have internal scroll
+      s.scrollTop = 0; 
     });
     
-    // Show requested screen
-    const screen = document.getElementById('screen-' + screenId);
-    if (screen) {
-      screen.classList.add('active');
+    // Activate the target screen
+    const target = document.getElementById('screen-' + screenId);
+    if (target) {
+      target.classList.add('active');
       this.currentScreen = screenId;
-      window.scrollTo({ top: 0, behavior: 'instant' }); 
+      
+      // Force jump to top of the document immediately
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo(0, 0);
     }
     // Render screen content
     const renderers = {
