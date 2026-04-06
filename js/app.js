@@ -103,19 +103,17 @@ const App = {
 
   showScreen(screenId) {
     SoundEngine.navigate();
-    // Hide all screens explicitly
+    // Hide all screens
     document.querySelectorAll('.screen').forEach(s => {
       s.classList.remove('active');
-      s.style.display = 'none';
     });
     
-    // Show only the requested screen
+    // Show requested screen
     const screen = document.getElementById('screen-' + screenId);
     if (screen) {
       screen.classList.add('active');
-      screen.style.display = 'flex';
       this.currentScreen = screenId;
-      window.scrollTo(0, 0); // Always jump to top on screen change
+      window.scrollTo({ top: 0, behavior: 'instant' }); 
     }
     // Render screen content
     const renderers = {

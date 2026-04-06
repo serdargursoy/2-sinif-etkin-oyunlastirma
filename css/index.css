@@ -249,20 +249,24 @@ h4 { font-size: var(--text-xl); }
 
 /* --- Screen System --- */
 .screen {
-  display: none;
-  min-height: 100vh;
+  display: none !important;
+  height: 0;
+  overflow: hidden;
   width: 100%;
-  padding: var(--space-6);
+  padding: 0; /* Clear padding when hidden */
   position: relative;
-  overflow-y: auto; /* Allow screen-specific scrolling if needed */
   animation: screenFadeIn 0.4s ease;
 }
 
 .screen.active {
-  display: flex !important; /* Force flex when active */
+  display: flex !important;
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
+  padding: var(--space-6);
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Ensure content starts from the top */
+  justify-content: flex-start;
 }
 
 @keyframes screenFadeIn {
