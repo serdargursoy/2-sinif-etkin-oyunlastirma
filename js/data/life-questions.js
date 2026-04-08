@@ -26,7 +26,8 @@ const LIFE_QUESTIONS = {
         { id: 'life-oh-004', type: 'multiple-choice', difficulty: 1, question: 'Sınıf başkanını nasıl seçeriz?', options: ['Öğretmen seçer', 'Kura çekeriz', 'Oylama yaparak (Seçim)', 'En uzun boyluyu seçeriz'], correct: 'Oylama yaparak (Seçim)', hint: 'Demokrasi.', points: 10 },
         { id: 'life-oh-005', type: 'match', difficulty: 2, question: 'Kelimeleri eşleştir!', pairs: [{left: 'Okul müdürü', right: 'Okulu yönetir'}, {left: 'Öğretmen', right: 'Ders anlatır'}, {left: 'Nöbetçi', right: 'Tenefüste düzen sağlar'}], points: 20 },
         { id: 'life-oh-006', type: 'multiple-choice', difficulty: 1, question: 'Okul çantamızı hazırlarken neye dikkat etmeliyiz?', options: ['Tüm kitapları koymalıyız', 'Sadece oyuncak koymalıyız', 'Ders programına bakmalıyız', 'En sevdiğimiz kitapları koymalıyız'], correct: 'Ders programına bakmalıyız', hint: 'Programdaki dersler.', points: 10 },
-        { id: 'life-oh-007', type: 'multiple-choice', difficulty: 2, question: 'Aşağıdakilerden hangisi bir okul kaynağını tasarruflu kullanmaya örnektir?', options: ['Tuvalette suyu açık bırakmak', 'Sınıf lambalarını boş yere yakmak', 'Tebeşiri/Kalemi sadece gerektiğinde kullanmak', 'Okul eşyalarına zarar vermek'], correct: 'Tebeşiri/Kalemi sadece gerektiğinde kullanmak', hint: 'Eşyaları korumalıyız.', points: 15 }
+        { id: 'life-oh-007', type: 'multiple-choice', difficulty: 2, question: 'Aşağıdakilerden hangisi bir okul kaynağını tasarruflu kullanmaya örnektir?', options: ['Tuvalette suyu açık bırakmak', 'Sınıf lambalarını boş yere yakmak', 'Tebeşiri/Kalemi sadece gerektiğinde kullanmak', 'Okul eşyalarına zarar vermek'], correct: 'Tebeşiri/Kalemi sadece gerektiğinde kullanmak', hint: 'Eşyaları korumalıyız.', points: 15 },
+        { id: 'life-oh-008', type: 'true-false', difficulty: 1, question: 'Eşyalarını unutan arkaşımıza kendi kalemimizi verebiliriz (paylaşabiliriz).', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 }
       ]
     },
     {
@@ -47,7 +48,9 @@ const LIFE_QUESTIONS = {
         { id: 'life-eh-003', type: 'match', difficulty: 2, question: 'Tasarruf yollarını eşleştir!', pairs: [{left: 'Lamba söndürmek', right: 'Elektrik tasarrufu'}, {left: 'Musluk kapatmak', right: 'Su tasarrufu'}, {left: 'Kumbaraya para atmak', right: 'Para tasarrufu'}], points: 20 },
         { id: 'life-eh-004', type: 'true-false', difficulty: 1, question: 'Kendi ev adresimizi ve ailemizin telefonunu ezbere bilmeliyiz.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', hint: 'Kaybolduğunda bu bilgiler hayat kurtarır.', points: 10 },
         { id: 'life-eh-005', type: 'multiple-choice', difficulty: 2, question: 'Aşağıdakilerden hangisi evdeki kaynakları tasarruflu kullanmaya örnektir?', options: ['Suyu açık bırakmak', 'Gerekli olmayan ışıkları kapatmak', 'Televizyonu bütün gün açık bırakmak', 'Gereksiz kağıt harcamak'], correct: 'Gerekli olmayan ışıkları kapatmak', hint: 'Elektrik tasarrufu.', points: 10 },
-        { id: 'life-eh-006', type: 'multiple-choice', difficulty: 1, question: 'Ekmek israfını önlemek için ne yapmalıyız?', options: ['Çok ekmek alıp çöpe atmalıyız', 'İhtiyacımız kadar ekmek almalıyız', 'Ekmeği sadece biz yemeliyiz', 'Ekmeği balkondan atmalıyız'], correct: 'İhtiyacımız kadar ekmek almalıyız', hint: 'İsraftan kaçınmalıyız.', points: 10 }
+        { id: 'life-eh-006', type: 'multiple-choice', difficulty: 1, question: 'Ekmek israfını önlemek için ne yapmalıyız?', options: ['Çok ekmek alıp çöpe atmalıyız', 'İhtiyacımız kadar ekmek almalıyız', 'Ekmeği sadece biz yemeliyiz', 'Ekmeği balkondan atmalıyız'], correct: 'İhtiyacımız kadar ekmek almalıyız', hint: 'İsraftan kaçınmalıyız.', points: 10 },
+        { id: 'life-eh-007', type: 'fill-blank', difficulty: 1, question: 'Annemizin annesine _____ deriz.', correct: ['anneanne'], points: 15 },
+        { id: 'life-eh-008', type: 'true-false', difficulty: 1, question: 'Evdeki işleri sadece anneler yapmalıdır.', options: ['Doğru', 'Yanlış'], correct: 'Yanlış', hint: 'Görevleri paylaşmalıyız.', points: 10 }
       ]
     },
     {
@@ -65,7 +68,11 @@ const LIFE_QUESTIONS = {
         { id: 'life-sh-001', type: 'multiple-choice', difficulty: 1, question: 'Aşağıdakilerden hangisi kişisel bakımımızla ilgilidir?', options: ['Ödev yapmak', 'Dişlerimizi fırçalamak', 'Oyun oynamak', 'Televizyon izlemek'], correct: 'Dişlerimizi fırçalamak', hint: 'Ağız sağlığı önemlidir.', points: 10 },
         { id: 'life-sh-002', type: 'fill-blank', difficulty: 1, question: 'Günde en az _____ kere dişlerimizi fırçalamalıyız. (Sayıyla yazınız)', correct: ['2'], hint: 'Sabah ve akşam.', points: 15 },
         { id: 'life-sh-003', type: 'true-false', difficulty: 1, question: 'Abur cubur yemek boyumuzu çok uzatır ve bizi güçlendirir.', options: ['Doğru', 'Yanlış'], correct: 'Yanlış', hint: 'Sağlıklı besinler yemeliyiz.', points: 10 },
-        { id: 'life-sh-004', type: 'multiple-choice', difficulty: 1, question: 'Hangi öğünde genellikle yumurta ve peynir yeriz?', options: ['Öğle Yemeği', 'Akşam Yemeği', 'Kahvaltı', 'Yatmadan Önce'], correct: 'Kahvaltı', hint: 'Günün ilk öğünü.', points: 10 }
+        { id: 'life-sh-004', type: 'multiple-choice', difficulty: 1, question: 'Hangi öğünde genellikle yumurta ve peynir yeriz?', options: ['Öğle Yemeği', 'Akşam Yemeği', 'Kahvaltı', 'Yatmadan Önce'], correct: 'Kahvaltı', hint: 'Günün ilk öğünü.', points: 10 },
+        { id: 'life-sh-005', type: 'fill-blank', difficulty: 1, question: 'Ellerimizi yemekten önce ve sonra mutlaka _____ (ne yapmalıyız?)', correct: ['yıkamalıyız'], points: 15 },
+        { id: 'life-sh-006', type: 'multiple-choice', difficulty: 1, question: 'Hangisi çok yararlıdır?', options: ['Kola', 'Cips', 'Süt', 'Şeker'], correct: 'Süt', points: 10 },
+        { id: 'life-sh-007', type: 'match', difficulty: 2, question: 'Doğru davranışları eşleştir!', pairs: [{left: 'Her gün düzenli', right: 'Uyumak'}, {left: 'Haftada birkaç kez', right: 'Banyo yapmak'}], points: 20 },
+        { id: 'life-sh-008', type: 'true-false', difficulty: 1, question: 'Tırnaklarımız uzadığında onları kesmeliyiz.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 }
       ]
     },
     {
@@ -82,7 +89,12 @@ const LIFE_QUESTIONS = {
       questions: [
         { id: 'life-gh-001', type: 'multiple-choice', difficulty: 1, question: 'Trafikte yaya için kırmızı ışık yandığında ne yapılmalıdır?', options: ['Koşulmalıdır', 'Beklenmelidir', 'Yürünmelidir', 'Bağırılmalıdır'], correct: 'Beklenmelidir', hint: 'Kırmızı dur demektir.', points: 15 },
         { id: 'life-gh-002', type: 'fill-blank', difficulty: 1, question: 'Acil durumlarda (ambulans, polis) hangi numara aranır?', correct: ['112'], hint: 'Bir - bir - iki.', points: 20 },
-        { id: 'life-gh-003', type: 'true-false', difficulty: 1, question: 'Tanımadığımız kişilerin arabasına binmek güvenlidir.', options: ['Doğru', 'Yanlış'], correct: 'Yanlış', hint: 'Güvenliğimiz için hayır demeliyiz.', points: 15 }
+        { id: 'life-gh-003', type: 'true-false', difficulty: 1, question: 'Tanımadığımız kişilerin arabasına binmek güvenlidir.', options: ['Doğru', 'Yanlış'], correct: 'Yanlış', hint: 'Güvenliğimiz için hayır demeliyiz.', points: 15 },
+        { id: 'life-gh-004', type: 'multiple-choice', difficulty: 1, question: 'Karşıdan karşıya geçerken önce hangi tarafa bakarız?', options: ['Sağa', 'Sola', 'Yukarı', 'Arkaya'], correct: 'Sola', hint: 'Ülkemizde trafik sağdan akar, tehlike soldan gelir.', points: 15 },
+        { id: 'life-gh-005', type: 'match', difficulty: 2, question: 'Renkleri eşleştir!', pairs: [{left: 'Kırmızı', right: 'Dur'}, {left: 'Sarı', right: 'Hazırlan'}, {left: 'Yeşil', right: 'Geç'}], points: 20 },
+        { id: 'life-gh-006', type: 'fill-blank', difficulty: 1, question: 'Arabada her zaman _____ kemeri takmalıyız.', correct: ['emniyet'], points: 15 },
+        { id: 'life-gh-007', type: 'true-false', difficulty: 1, question: 'Prizlerle ve kesici aletlerle tek başımıza oynamamız tehlikelidir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
+        { id: 'life-gh-008', type: 'multiple-choice', difficulty: 1, question: 'Evde yangın çıkarsa kimi aramalıyız?', options: ['Polis', 'İtfaiye', 'Okul', 'Bakkal'], correct: 'İtfaiye', points: 10 }
       ]
     },
     {
@@ -99,7 +111,12 @@ const LIFE_QUESTIONS = {
       questions: [
         { id: 'life-uh-001', type: 'multiple-choice', difficulty: 1, question: 'Ülkemizin başkenti neresidir?', options: ['İstanbul', 'Ankara', 'İzmir', 'Bursa'], correct: 'Ankara', hint: 'A ile başlar.', points: 15 },
         { id: 'life-uh-002', type: 'fill-blank', difficulty: 1, question: 'Türkiye Cumhuriyeti\'nin kurucusu Gazi Mustafa Kemal _____ dur.', correct: ['Atatürk'], hint: 'A harfiyle biter.', points: 20 },
-        { id: 'life-uh-003', type: 'multiple-choice', difficulty: 1, question: 'İstiklal Marşımızın yazarı kimdir?', options: ['Atatürk', 'Mehmet Akif Ersoy', 'Ziya Gökalp', 'Fatih Sultan Mehmet'], correct: 'Mehmet Akif Ersoy', hint: 'M.A.E.', points: 15 }
+        { id: 'life-uh-003', type: 'multiple-choice', difficulty: 1, question: 'İstiklal Marşımızın yazarı kimdir?', options: ['Atatürk', 'Mehmet Akif Ersoy', 'Ziya Gökalp', 'Fatih Sultan Mehmet'], correct: 'Mehmet Akif Ersoy', hint: 'M.A.E.', points: 15 },
+        { id: 'life-uh-004', type: 'true-false', difficulty: 1, question: 'Bayrağımızın rengi kırmızı ve beyazdır.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
+        { id: 'life-uh-005', type: 'fill-blank', difficulty: 1, question: 'Bayrağımızın üzerinde hilal ve _____ vardır.', correct: ['yıldız'], points: 15 },
+        { id: 'life-uh-006', type: 'multiple-choice', difficulty: 1, question: '29 Ekim hangi bayramdır?', options: ['Cumhuriyet Bayramı', 'Zafer Bayramı', 'Ramazan', 'Çocuk Bayramı'], correct: 'Cumhuriyet Bayramı', points: 15 },
+        { id: 'life-uh-007', type: 'true-false', difficulty: 1, question: '23 Nisan çocuklara armağan edilmiş bir bayramdır.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
+        { id: 'life-uh-008', type: 'multiple-choice', difficulty: 1, question: 'Yaşadığımız ülkenin adı nedir?', options: ['Ankara', 'Türkiye', 'Avrupa', 'Dünya'], correct: 'Türkiye', points: 10 }
       ]
     },
     {
@@ -116,7 +133,12 @@ const LIFE_QUESTIONS = {
       questions: [
         { id: 'life-dh-001', type: 'true-false', difficulty: 1, question: 'Pilleri çöpe değil, pil toplama kutularına atmalıyız.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', hint: 'Piller toprağı zehirler.', points: 15 },
         { id: 'life-dh-002', type: 'multiple-choice', difficulty: 1, question: 'Aşağıdakilerden hangisi doğaya zarar verir?', options: ['Ağaç dikmek', 'Denize çöp atmak', 'Geri dönüşüm yapmak', 'Çiçekleri sulamak'], correct: 'Denize çöp atmak', hint: 'Kötü bir davranıştır.', points: 10 },
-        { id: 'life-dh-003', type: 'fill-blank', difficulty: 1, question: 'Bitkilerin büyümesi için toprak, güneş ve _____ gereklidir.', correct: ['su'], points: 15 }
+        { id: 'life-dh-003', type: 'fill-blank', difficulty: 1, question: 'Bitkilerin büyümesi için toprak, güneş ve _____ gereklidir.', correct: ['su'], points: 15 },
+        { id: 'life-dh-004', type: 'multiple-choice', difficulty: 1, question: 'Kağıtlar neyden yapılır?', options: ['Demirden', 'Ağaçtan', 'Plastikten', 'Camdan'], correct: 'Ağaçtan', hint: 'Kağıt israfı ağaçları yok eder.', points: 15 },
+        { id: 'life-dh-005', type: 'true-false', difficulty: 1, question: 'Sokak hayvanları için kapıya su ve mama koymak iyi bir davranıştır.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
+        { id: 'life-dh-006', type: 'fill-blank', difficulty: 1, question: 'Plastik ve camları atmamız gereken yer _____ kutularıdır.', correct: ['geri dönüşüm', 'geridönüşüm'], points: 20 },
+        { id: 'life-dh-007', type: 'multiple-choice', difficulty: 1, question: 'Çevreyi korumak için hangisini yapmamalıyız?', options: ['Çiçek dikmeliyiz', 'Suyu boşa akıtmamalıyız', 'Yerlere çöp atmalıyız', 'Geri dönüşüm yapmalıyiz'], correct: 'Yerlere çöp atmalıyız', points: 10 },
+        { id: 'life-dh-008', type: 'match', difficulty: 2, question: 'Doğayı koruyalım!', pairs: [{left: 'Defter, Kağıt', right: 'Ağaçları Koru'}, {left: 'Boşa akan su', right: 'Suyu Koru'}], points: 20 }
       ]
     }
   ]

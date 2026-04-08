@@ -111,7 +111,13 @@ const MATH_QUESTIONS = {
       lessons: [{ title: 'Saatler', text: 'Tam saatlerde yelkovan 12 nin üzerindedir.'}],
       questions: [
         { id: 'math-zo-001', type: 'multiple-choice', difficulty: 1, question: 'Bir gün kaç saattir?', options: ['12', '24', '60', '7'], correct: '24', hint: 'Gece ve gündüz toplamı.', points: 15 },
-        { id: 'math-zo-002', type: 'fill-blank', difficulty: 1, question: 'Yelkovan 12 de, akrep 9 da ise saat kaçtır? (Sayıyla yazın)', correct: ['9', '09:00'], points: 20 }
+        { id: 'math-zo-002', type: 'fill-blank', difficulty: 1, question: 'Yelkovan 12 de, akrep 9 da ise saat kaçtır? (Sayıyla yazın)', correct: ['9', '09:00', '9:00'], points: 20 },
+        { id: 'math-zo-003', type: 'multiple-choice', difficulty: 1, question: 'Bir hafta kaç gündür?', options: ['5', '7', '10', '12'], correct: '7', points: 10 },
+        { id: 'math-zo-004', type: 'true-false', difficulty: 1, question: 'Bir yılda tamsı tamına 12 ay vardır.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
+        { id: 'math-zo-005', type: 'fill-blank', difficulty: 2, question: '1 saat _____ dakikadır.', correct: ['60'], points: 15 },
+        { id: 'math-zo-006', type: 'multiple-choice', difficulty: 2, question: 'Yarım saat kaç dakikadır?', options: ['15', '30', '45', '60'], correct: '30', points: 15 },
+        { id: 'math-zo-007', type: 'match', difficulty: 2, question: 'Zamanları eşleştir!', pairs: [{left: 'Çeyrek saat', right: '15 Dakika'}, {left: 'Yarım saat', right: '30 Dakika'}, {left: '1 Saat', right: '60 Dakika'}], points: 20 },
+        { id: 'math-zo-008', type: 'true-false', difficulty: 2, question: 'Akrep saati, yelkovan ise dakikayı gösterir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 }
       ]
     },
     {
@@ -125,7 +131,13 @@ const MATH_QUESTIONS = {
       lessons: [{ title: 'Lira ve Kuruş', text: '1 TL tam 100 kuruştur.'}],
       questions: [
         { id: 'math-para-001', type: 'multiple-choice', difficulty: 1, question: 'En büyük kağıt paramız hangisidir?', options: ['50 TL', '100 TL', '200 TL', '250 TL'], correct: '200 TL', points: 15 },
-        { id: 'math-para-002', type: 'fill-blank', difficulty: 1, question: '2 tane 50 TL kaç TL eder?', correct: ['100'], points: 20 }
+        { id: 'math-para-002', type: 'fill-blank', difficulty: 1, question: '2 tane 50 TL kaç TL eder?', correct: ['100'], points: 20 },
+        { id: 'math-para-003', type: 'multiple-choice', difficulty: 1, question: '1 Lira (1 TL) kaç kuruştur?', options: ['10 Kuruş', '50 Kuruş', '100 Kuruş', '1000 Kuruş'], correct: '100 Kuruş', points: 10 },
+        { id: 'math-para-004', type: 'match', difficulty: 2, question: 'Paraları toplayıp eşleştir!', pairs: [{left: '10 TL + 5 TL', right: '15 TL'}, {left: '20 TL + 20 TL', right: '40 TL'}, {left: '50 TL + 50 TL', right: '100 TL'}], points: 20 },
+        { id: 'math-para-005', type: 'true-false', difficulty: 2, question: '3 tane 10 TL, 1 tane 50 TL den daha fazladır.', options: ['Doğru', 'Yanlış'], correct: 'Yanlış', hint: '3x10=30, 30<50!', points: 15 },
+        { id: 'math-para-006', type: 'fill-blank', difficulty: 2, question: 'Cebimde 20 TL vardı. 5 TL ye simit aldım. Cebimde _____ TL kaldı.', correct: ['15'], points: 15 },
+        { id: 'math-para-007', type: 'multiple-choice', difficulty: 1, question: 'En küçük madeni paramız hangisidir?', options: ['1 Kuruş', '5 Kuruş', '10 Kuruş', '1 Lira'], correct: '1 Kuruş', points: 10 },
+        { id: 'math-para-008', type: 'fill-blank', difficulty: 2, question: '4 tane 25 kuruş _____ Lira eder.', correct: ['1'], hint: '100 Kuruş = 1 Lira', points: 15 }
       ]
     }
   ]
