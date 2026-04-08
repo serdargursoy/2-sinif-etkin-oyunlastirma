@@ -285,7 +285,9 @@ const App = {
         date: today,
         quests: shuffled.map(s => ({
           subject: s,
-          text: `${SUBJECT_META[s].icon} ${SUBJECT_META[s].name}'nda 3 soru çöz`
+          text: `${SUBJECT_META[s].icon} ${SUBJECT_META[s].name}'nda 3 soru çöz`,
+          target: 3,
+          progress: 0
         })),
         completed: []
       };
@@ -297,9 +299,15 @@ const App = {
     if (!container) return;
     container.innerHTML = quests.quests.map((q, i) => {
       const done = quests.completed.includes(i);
+      const prog = q.progress || 0;
+      const target = q.target || 3;
+      const displayProg = Math.min(prog, target);
       return `<div class="quest-item ${done ? 'done' : ''}">
         <div class="quest-check ${done ? 'done' : ''}">${done ? '✓' : ''}</div>
-        <span>${q.text}</span>
+        <div style="flex:1">
+          <div style="margin-bottom:4px">${q.text}</div>
+          <div style="font-size:var(--text-xs); color:var(--color-text-secondary)">${displayProg} / ${target} yapıldı</div>
+        </div>
       </div>`;
     }).join('');
   },

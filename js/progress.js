@@ -158,6 +158,23 @@ const ProgressManager = {
         if (profile.wrongAnswers.length > 50) profile.wrongAnswers.shift();
       }
     }
+
+    // Update daily quests progress
+    const today = new Date().toISOString().split('T')[0];
+    if (profile.dailyQuests && profile.dailyQuests.date === today && profile.dailyQuests.quests) {
+      profile.dailyQuests.quests.forEach((q, idx) => {
+        if (q.subject === subject) {
+          if (typeof q.progress === 'undefined') q.progress = 0;
+          if (q.progress < (q.target || 3)) {
+            q.progress++;
+            if (q.progress >= (q.target || 3) && !profile.dailyQuests.completed.includes(idx)) {
+              profile.dailyQuests.completed.push(idx);
+            }
+          }
+        }
+      });
+    }
+
     this.save(data);
   },
 
