@@ -1009,7 +1009,7 @@ const App = {
   },
 
   checkBreak(onContinueCall) {
-    if (this.breakState.unitsCompleted >= 2) {
+    if (this.breakState.unitsCompleted >= 5) {
       this.breakState.unitsCompleted = 0;
       this.breakState.onContinue = onContinueCall;
       this.showScreen('break');
