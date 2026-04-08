@@ -59,9 +59,13 @@
       <div class="container" style="max-width:900px;width:100%">
         <!-- Top Bar -->
         <div class="top-bar">
-          <div class="flex items-center gap-3">
-            <div id="dash-avatar" class="avatar-display small" onclick="App.openAvatarEditor()" style="cursor:pointer">🧚</div>
-            <span id="dash-level" class="avatar-level-badge" style="position:static">1</span>
+          <div class="flex items-center gap-3" style="position: relative;">
+            <div class="avatar-container" style="position: relative;">
+              <div id="dash-avatar" class="avatar-display small bounce-hover" onclick="App.interactWithAvatar()" style="cursor:pointer; position:relative; z-index:2;">🧚</div>
+              <div onclick="App.openAvatarEditor()" style="position:absolute; bottom:-5px; left:-5px; background:var(--color-surface); border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-sm); cursor:pointer; z-index:3; font-size:12px; border:2px solid var(--color-primary-light);">✏️</div>
+              <div id="avatar-speech-bubble" class="speech-bubble">Hi!</div>
+            </div>
+            <span id="dash-level" class="avatar-level-badge" style="position:relative; z-index:2; margin-left:-10px;">1</span>
           </div>
           <div class="stats">
             <div class="stat-item"><span class="stat-icon">⭐</span><span id="dash-stars">0</span></div>

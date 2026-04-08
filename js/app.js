@@ -71,6 +71,67 @@ const App = {
     });
   },
 
+  interactWithAvatar() {
+    SoundEngine.play('click');
+    const avatar = document.getElementById('dash-avatar');
+    const bubble = document.getElementById('avatar-speech-bubble');
+    
+    // Animate avatar
+    avatar.classList.remove('avatar-interact');
+    void avatar.offsetWidth; // trigger reflow
+    avatar.classList.add('avatar-interact');
+    
+    // Show confetti
+    if (typeof confetti !== 'undefined') {
+       confetti({
+          particleCount: 30,
+          spread: 60,
+          origin: { x: avatar.getBoundingClientRect().left / window.innerWidth, y: avatar.getBoundingClientRect().top / window.innerHeight }
+       });
+    } else {
+       this.showMiniConfetti(avatar);
+    }
+    
+    // Messages
+    const msgs = [
+      `Harika görünüyorsun ${this.currentProfile.name}!`,
+      "Bugün kaç yıldız toplayacağız?",
+      "Sen bir harikasın! 🌟",
+      "Matematikte çok iyisin! 🧠",
+      "Hadi maceralara atılalım! 🚀",
+      "Çok yaşa! ✨",
+      "Sihirli ormana hoş geldin! 🌲",
+      "Bugün yıldız gibi parlıyorsun! 💫"
+    ];
+    bubble.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+    
+    bubble.classList.remove('show');
+    void bubble.offsetWidth;
+    bubble.classList.add('show');
+  },
+  
+  showMiniConfetti(el) {
+    const rect = el.getBoundingClientRect();
+    for(let i=0; i<6; i++) {
+      const p = document.createElement('div');
+      p.textContent = ['⭐','💖','🎉','✨','🍬'][Math.floor(Math.random()*5)];
+      p.style.position = 'fixed';
+      p.style.left = (rect.left + rect.width/2) + 'px';
+      p.style.top = (rect.top + rect.height/2) + 'px';
+      p.style.fontSize = '24px';
+      p.style.pointerEvents = 'none';
+      p.style.zIndex = '9999';
+      p.style.transition = 'all 1s ease-out';
+      document.body.appendChild(p);
+      
+      setTimeout(() => {
+        p.style.transform = `translate(${(Math.random()-0.5)*120}px, -${Math.random()*120+60}px) rotate(${Math.random()*360}deg)`;
+        p.style.opacity = '0';
+      }, 50);
+      setTimeout(() => p.remove(), 1050);
+    }
+  },
+
   createSparkles() {
     const container = document.getElementById('sparkles');
     if (!container) return;
@@ -210,8 +271,32 @@ const App = {
 
     // Greeting
     const hour = new Date().getHours();
-    let greeting = hour < 12 ? 'Günaydın' : hour < 18 ? 'Merhaba' : 'İyi akşamlar';
-    document.getElementById('dash-greeting').innerHTML = `${greeting}, <span class="greeting-name">${profile.name}</span>! ✨`;
+    let greeting = 'Merhaba';
+    let subMessage = 'Bugün harika şeyler öğreneceğiz!';
+    if (hour < 10) {
+      greeting = 'Günaydın';
+      subMessage = 'Kahvaltını yaptın mı? Güne enerjik başlayalım!';
+    } else if (hour < 14) {
+      greeting = 'Tünaydın';
+      subMessage = 'Öğlen molasından sonra macera devam ediyor!';
+    } else if (hour < 18) {
+      greeting = 'İyi günler';
+      subMessage = 'Günün nasıl geçiyor? Başarılar seninle!';
+    } else {
+      greeting = 'İyi akşamlar';
+      subMessage = 'Uyumadan önce biraz yıldız toplamaya ne dersin?';
+    }
+    document.getElementById('dash-greeting').innerHTML = `${greeting}, <span class="greeting-name">${profile.name}</span>! ✨<div style="font-size:var(--text-lg);font-weight:normal;color:var(--color-text-secondary);margin-top:4px">${subMessage}</div>`;
+
+    // Interactivity: Avatar intro bubble logic
+    setTimeout(() => {
+        const bubble = document.getElementById('avatar-speech-bubble');
+        if (bubble && !bubble.classList.contains('show')) {
+            bubble.textContent = `Hoş geldin ${profile.name}! Beni tıkla!`;
+            bubble.classList.add('show');
+            setTimeout(() => { bubble.classList.remove('show'); }, 3000);
+        }
+    }, 1000);
 
     // Avatar
     document.getElementById('dash-avatar').innerHTML = profile.avatar;
