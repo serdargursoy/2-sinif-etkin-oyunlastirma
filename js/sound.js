@@ -184,6 +184,26 @@ const SoundEngine = {
       window.speechSynthesis.speak(utterance);
     });
   },
+  
+  speakEnglish(text) {
+    if (!this.enabled || !window.speechSynthesis) return;
+    this.stopSpeak();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    utterance.pitch = 1.0;
+    utterance.lang = 'en-US';
+    
+    const enVoices = this._voices.filter(v => v.lang.includes('en'));
+    let bestEn = enVoices.find(v => v.name.includes('Google'));
+    if (!bestEn) bestEn = enVoices.find(v => v.name.includes('Premium'));
+    if (!bestEn) bestEn = enVoices.find(v => v.name.includes('Siri'));
+    if (!bestEn) bestEn = enVoices.find(v => v.name.includes('Samantha'));
+    if (!bestEn && enVoices.length > 0) bestEn = enVoices[0];
+    
+    if (bestEn) utterance.voice = bestEn;
+    window.speechSynthesis.speak(utterance);
+  },
 
   stopSpeak() {
     if (window.speechSynthesis) {

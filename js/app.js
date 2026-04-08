@@ -661,8 +661,21 @@ const App = {
     const pct = ((qs.currentIndex) / qs.questions.length) * 100;
     document.getElementById('quiz-progress-fill').style.width = pct + '%';
 
-    // Question
-    document.getElementById('quiz-question').textContent = q.question;
+    // Question content and Audio support
+    let qHtml = q.question;
+    
+    if (q.type === 'audio-question') {
+      qHtml = `
+        <div class="audio-play-btn" style="font-size:4rem; cursor:pointer; color:var(--color-primary); display:inline-block; margin-bottom:10px; transition:transform 0.2s;" onclick="this.style.transform='scale(0.9)'; setTimeout(()=>this.style.transform='scale(1)', 200); SoundEngine.speakEnglish('${q.englishText}')">
+           ▶️
+        </div>
+        <div style="font-size:var(--text-lg); color:var(--color-text-secondary);">${qHtml}</div>
+      `;
+    } else if (q.englishText && qs.subject === 'english') {
+      qHtml += ` <button class="btn btn-ghost" style="margin-left:10px; border-radius:50%; width:48px;height:48px;padding:0; font-size:1.5rem;" onclick="SoundEngine.speakEnglish('${q.englishText}')">🔊</button>`;
+    }
+    
+    document.getElementById('quiz-question').innerHTML = qHtml;
 
     // Image in Question
     const qImgEl = document.getElementById('quiz-question-image');
@@ -689,7 +702,7 @@ const App = {
     document.getElementById('quiz-hint').innerHTML = '';
     document.getElementById('quiz-next-btn').classList.add('hidden');
 
-    if (q.type === 'multiple-choice' || q.type === 'true-false') {
+    if (q.type === 'multiple-choice' || q.type === 'true-false' || q.type === 'audio-question') {
       grid.classList.remove('hidden');
       grid.innerHTML = q.options.map((opt, i) => `
         <div class="card-option" id="option-${i}" onclick="App.selectAnswer(${i})">${typeof opt === 'object' ? opt.value : opt}</div>
@@ -737,7 +750,11 @@ const App = {
     qs.answered = false;
     
     // Soruyu sesli oku
-    setTimeout(() => SoundEngine.speak(q.question), 300);
+    if (q.type === 'audio-question') {
+      setTimeout(() => SoundEngine.speakEnglish(q.englishText), 600);
+    } else {
+      setTimeout(() => SoundEngine.speak(q.question), 300);
+    }
   },
 
   selectAnswer(idx) {
@@ -754,7 +771,7 @@ const App = {
     const selectedValue = typeof selected === 'object' ? selected.value : selected;
     const isCorrect = selectedValue === q.correct;
 
-    if (q.type === 'multiple-choice' || q.type === 'true-false') {
+    if (q.type === 'multiple-choice' || q.type === 'true-false' || q.type === 'audio-question') {
       // Mark options
       q.options.forEach((opt, i) => {
         const el = document.getElementById('option-' + i);

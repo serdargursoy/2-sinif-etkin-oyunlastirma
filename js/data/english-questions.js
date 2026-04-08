@@ -19,9 +19,10 @@ const ENGLISH_QUESTIONS = {
         { title: 'Ortak Kelimeler 🍕', text: 'Bazı kelimeler hem Türkçe hem İngilizce aynıdır: <strong>Pizza, Taxi, Gorilla, Football, Robot</strong>.' }
       ],
       questions: [
-        { id: 'eng-w-001', type: 'multiple-choice', difficulty: 1, question: 'Aşağıdakilerden hangisi bir hayvandır?', options: ['Taxi', 'Pizza', 'Gorilla', 'Robot'], correct: 'Gorilla', hint: 'Ormanda yaşar.', points: 10 },
+        { id: 'eng-w-001', type: 'multiple-choice', difficulty: 1, question: 'Aşağıdakilerden hangisi bir hayvandır?', options: ['Taxi', 'Pizza', 'Gorilla', 'Robot'], correct: 'Gorilla', hint: 'Ormanda yaşar.', points: 10, englishText: 'Gorilla' },
+        { id: 'eng-w-listen-1', type: 'audio-question', difficulty: 2, englishText: 'Ambulance', question: 'Duyduğun kelimenin Türkçe anlamı hangisidir?', options: ['Ambulans', 'Taksi', 'Polis', 'Doktor'], correct: 'Ambulans', hint: 'Hastaneye yolcu taşır.', points: 20 },
         { id: 'eng-w-002', type: 'match', difficulty: 1, question: 'Kelimeleri eşleştir!', pairs: [{left: 'Pizza', right: 'Yiyecek'}, {left: 'Taxi', right: 'Araba'}, {left: 'Robot', right: 'Makine'}], points: 20 },
-        { id: 'eng-w-003', type: 'multiple-choice', difficulty: 1, question: '"Football" kelimesinin Türkçe anlamı nedir?', options: ['Basketbol', 'Futbol', 'Voleybol', 'Tenis'], correct: 'Futbol', hint: 'Ayakla oynanan bir spordur.', points: 10 },
+        { id: 'eng-w-003', type: 'multiple-choice', difficulty: 1, question: '"Football" kelimesinin Türkçe anlamı nedir?', options: ['Basketbol', 'Futbol', 'Voleybol', 'Tenis'], correct: 'Futbol', hint: 'Ayakla oynanan bir spordur.', points: 10, englishText: 'Football' },
         { id: 'eng-w-004', type: 'fill-blank', difficulty: 1, question: 'Taksi kelimesinin İngilizcesi _____ şeklindedir.', correct: ['taxi'], hint: 'İçinde X harfi var.', points: 15 },
         { id: 'eng-w-005', type: 'true-false', difficulty: 1, question: '"Kangaroo" hayvanı Türkçede Kanguru demektir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', hint: 'Sesleri çok benzer.', points: 10 },
         { id: 'eng-w-006', type: 'multiple-choice', difficulty: 1, question: 'Hangi kelime ulaşım aracıdır?', options: ['Doctor', 'Lemon', 'Ambulance', 'Television'], correct: 'Ambulance', hint: 'Hastaları taşır.', points: 15 },
@@ -41,9 +42,10 @@ const ENGLISH_QUESTIONS = {
         { title: 'Ismimi Söylüyorum 👋', text: '"What is your name?" (Adın ne?) sorusuna <span class="rainbow-text">My name is...</span> diyerek cevap veririz.' }
       ],
       questions: [
-        { id: 'eng-fr-001', type: 'multiple-choice', difficulty: 1, question: 'Birine ismini nasıl sorarsın?', options: ['How are you?', 'What is your name?', 'Fine, thanks', 'Goodbye'], correct: 'What is your name?', hint: 'Name isim demektir.', points: 10 },
+        { id: 'eng-fr-001', type: 'multiple-choice', difficulty: 1, question: 'Birine ismini nasıl sorarsın?', options: ['How are you?', 'What is your name?', 'Fine, thanks', 'Goodbye'], correct: 'What is your name?', hint: 'Name isim demektir.', points: 10, englishText: 'What is your name?' },
+        { id: 'eng-fr-listen-1', type: 'audio-question', difficulty: 2, englishText: 'Good morning', question: 'Duyduğun kelime ne zaman söylenir?', options: ['Sabahları', 'Akşamları', 'Öğlen', 'Gece'], correct: 'Sabahları', hint: 'Uyanınca söyleriz.', points: 20 },
         { id: 'eng-fr-002', type: 'fill-blank', difficulty: 1, question: '"My name _____ Serdar." (Eksik kelimeyi yazınız)', correct: ['is'], hint: 'I ile başlar.', points: 15 },
-        { id: 'eng-fr-003', type: 'multiple-choice', difficulty: 1, question: '"Hello!" ne demektir?', options: ['Güle güle', 'Merhaba', 'Nasılsın', 'Teşekkürler'], correct: 'Merhaba', hint: 'Karşılaşınca söylenir.', points: 10 },
+        { id: 'eng-fr-003', type: 'multiple-choice', difficulty: 1, question: '"Hello!" ne demektir?', options: ['Güle güle', 'Merhaba', 'Nasılsın', 'Teşekkürler'], correct: 'Merhaba', hint: 'Karşılaşınca söylenir.', points: 10, englishText: 'Hello!' },
         { id: 'eng-fr-004', type: 'true-false', difficulty: 1, question: '"Good morning" Günaydın demektir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', hint: 'Sabahları söylenir.', points: 10 },
         { id: 'eng-fr-005', type: 'multiple-choice', difficulty: 1, question: '"How are you?" ne demektir?', options: ['Adın ne', 'Nasılsın', 'Otur', 'Günaydın'], correct: 'Nasılsın', hint: 'Hatır sormaktır.', points: 10 },
         { id: 'eng-fr-006', type: 'fill-blank', difficulty: 2, question: '"I am fine" (İyiyim) demek için _____ fine deriz. (Eksik kelimeyi yazın)', correct: ['i am', 'I am', 'Iam'], hint: 'Ben anlamına gelir.', points: 15 },
