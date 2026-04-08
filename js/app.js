@@ -104,11 +104,10 @@ const App = {
   showScreen(screenId) {
     if (SoundEngine) SoundEngine.navigate();
     
-    // Deactivate ALL screens thoroughly
+    // Deactivate ALL screens
     const allScreens = document.querySelectorAll('.screen');
     allScreens.forEach(s => {
       s.classList.remove('active');
-      // Force scroll reset for each screen if they have internal scroll
       s.scrollTop = 0; 
     });
     
@@ -117,12 +116,10 @@ const App = {
     if (target) {
       target.classList.add('active');
       this.currentScreen = screenId;
-      
-      // Force jump to top of the document immediately
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      window.scrollTo(0, 0);
+      // Scroll to top of the screen element (not window)
+      target.scrollTop = 0;
     }
+
     // Render screen content
     const renderers = {
       'welcome': () => this.renderWelcome(),
@@ -138,7 +135,13 @@ const App = {
       'parent': () => this.renderParent()
     };
     if (renderers[screenId]) renderers[screenId]();
+    
+    // Ensure scroll reset after render
+    requestAnimationFrame(() => {
+      if (target) target.scrollTop = 0;
+    });
   },
+
 
   // ==========================================
   // WELCOME SCREEN
@@ -820,7 +823,10 @@ const App = {
     document.getElementById('quiz-stars-count').textContent = qs.score;
     const nextBtn = document.getElementById('quiz-next-btn');
     nextBtn.classList.remove('hidden');
-    setTimeout(() => nextBtn.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+    setTimeout(() => {
+      const activeScreen = document.querySelector('.screen.active');
+      if (activeScreen) activeScreen.scrollTo({ top: activeScreen.scrollHeight, behavior: 'smooth' });
+    }, 120);
   },
 
   handleWrongAnswer(hint) {
@@ -841,7 +847,10 @@ const App = {
     document.getElementById('quiz-stars-count').textContent = qs.score;
     const nextBtn = document.getElementById('quiz-next-btn');
     nextBtn.classList.remove('hidden');
-    setTimeout(() => nextBtn.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+    setTimeout(() => {
+      const activeScreen = document.querySelector('.screen.active');
+      if (activeScreen) activeScreen.scrollTo({ top: activeScreen.scrollHeight, behavior: 'smooth' });
+    }, 120);
   },
 
   nextQuestion() {

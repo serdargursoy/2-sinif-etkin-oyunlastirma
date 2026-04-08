@@ -143,6 +143,7 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   font-size: 16px;
+  height: 100%;
 }
 
 body {
@@ -152,8 +153,8 @@ body {
   color: var(--color-text);
   background: var(--color-bg);
   line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
+  height: 100%;
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -242,7 +243,7 @@ h4 { font-size: var(--text-xl); }
 
 /* --- App Container --- */
 #app {
-  min-height: 100vh;
+  height: 100vh;
   position: relative;
   overflow: hidden;
 }
@@ -250,23 +251,28 @@ h4 { font-size: var(--text-xl); }
 /* --- Screen System --- */
 .screen {
   display: none !important;
-  height: 0 !important;
-  overflow: hidden !important;
   width: 100%;
   padding: 0 !important;
-  position: relative;
-  animation: screenFadeIn 0.4s ease;
+  margin: 0 !important;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .screen.active {
   display: flex !important;
-  height: auto !important;
-  min-height: 100vh !important;
-  overflow: visible !important;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: var(--space-6) !important;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  animation: screenFadeIn 0.4s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 @keyframes screenFadeIn {

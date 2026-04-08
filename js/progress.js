@@ -186,21 +186,35 @@ const ProgressManager = {
     const profile = this.getProfile(profileId);
     if (!profile || !profile.subjectProgress[subject] || !profile.subjectProgress[subject][unitId]) return 0;
     const completed = profile.subjectProgress[subject][unitId].completed.length;
-    // Total questions per unit is 15 (estimated avg)
-    return Math.min(Math.round((completed / 10) * 100), 100);
+    // Use actual question count from subject data if available
+    let totalQuestions = 10; // fallback
+    if (typeof SUBJECTS_DATA !== 'undefined' && SUBJECTS_DATA[subject]) {
+      const unit = SUBJECTS_DATA[subject].units.find(u => u.id === unitId);
+      if (unit && unit.questions) totalQuestions = unit.questions.length;
+    }
+    return Math.min(Math.round((completed / totalQuestions) * 100), 100);
   },
 
   getSubjectProgress(profileId, subject) {
     const profile = this.getProfile(profileId);
     if (!profile || !profile.subjectProgress[subject]) return 0;
     let totalCompleted = 0;
-    let totalUnits = 0;
-    Object.values(profile.subjectProgress[subject]).forEach(unit => {
-      totalCompleted += unit.completed.length;
-      totalUnits++;
-    });
-    // Let's assume 10 questions * 4 units roughly
-    return Math.min(Math.round((totalCompleted / 40) * 100), 100);
+    let totalPossible = 0;
+    // Use actual question counts if available
+    if (typeof SUBJECTS_DATA !== 'undefined' && SUBJECTS_DATA[subject]) {
+      SUBJECTS_DATA[subject].units.forEach(unit => {
+        const unitData = profile.subjectProgress[subject][unit.id];
+        totalCompleted += unitData ? unitData.completed.length : 0;
+        totalPossible += unit.questions ? unit.questions.length : 10;
+      });
+    } else {
+      Object.values(profile.subjectProgress[subject]).forEach(unit => {
+        totalCompleted += unit.completed.length;
+        totalPossible += 10;
+      });
+    }
+    if (totalPossible === 0) return 0;
+    return Math.min(Math.round((totalCompleted / totalPossible) * 100), 100);
   },
 
   updateStreak(profileId) {
