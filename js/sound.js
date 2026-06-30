@@ -205,6 +205,59 @@ const SoundEngine = {
     window.speechSynthesis.speak(utterance);
   },
 
+  listenEnglish(targetSentence, onResult, onStart, onEnd, onError) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+       console.warn("Speech recognition not supported");
+       if (onError) onError("not-supported");
+       return;
+    }
+    
+    if (this.recognition) {
+       this.recognition.abort();
+    }
+    
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    this.recognition = recognition;
+    
+    recognition.onstart = () => {
+       if (onStart) onStart();
+    };
+    
+    recognition.onresult = (event) => {
+       const speechResult = event.results[0][0].transcript.trim().toLowerCase();
+       const confidence = event.results[0][0].confidence;
+       
+       // Clean punctuation from target and result for comparison
+       const cleanTarget = targetSentence.replace(/[.,!?]/g, '').toLowerCase().trim();
+       const cleanResult = speechResult.replace(/[.,!?]/g, '').trim();
+       
+       const isMatch = cleanTarget === cleanResult || cleanResult.includes(cleanTarget) || cleanTarget.includes(cleanResult);
+       if (onResult) onResult({ transcript: speechResult, isMatch, confidence });
+    };
+    
+    recognition.onspeechend = () => {
+       recognition.stop();
+    };
+    
+    recognition.onend = () => {
+       if (onEnd) onEnd();
+    };
+    
+    recognition.onerror = (event) => {
+       if (onError) onError(event.error);
+    };
+    
+    try {
+       recognition.start();
+    } catch (e) {
+       console.error("Speech recognition start error", e);
+    }
+  },
+
   stopSpeak() {
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();

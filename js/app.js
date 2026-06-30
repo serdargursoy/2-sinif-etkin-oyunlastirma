@@ -38,6 +38,24 @@ const ENCOURAGEMENTS_WRONG = [
   'Olsun, öğreniyoruz! 📚', 'Tekrar dene, yaparsın! ✨'
 ];
 
+const DAILY_ENGLISH_PHRASES = [
+  { en: "Good morning!", tr: "Günaydın!" },
+  { en: "How are you?", tr: "Nasılsın?" },
+  { en: "I am fine, thank you.", tr: "İyiyim, teşekkür ederim." },
+  { en: "What is your name?", tr: "Senin adın ne?" },
+  { en: "I like apples.", tr: "Elmaları severim." },
+  { en: "This is a cat.", tr: "Bu bir kedidir." },
+  { en: "I love my school.", tr: "Okulumu seviyorum." },
+  { en: "Have a good day!", tr: "İyi günler dilerim!" },
+  { en: "See you tomorrow.", tr: "Yarın görüşürüz." },
+  { en: "I can jump.", tr: "Ben zıplayabilirim." },
+  { en: "The sky is blue.", tr: "Gökyüzü mavidir." },
+  { en: "Let's play a game.", tr: "Hadi oyun oynayalım." },
+  { en: "I have a red pen.", tr: "Kırmızı bir kalemim var." },
+  { en: "You are my friend.", tr: "Sen benim arkadaşımsın." },
+  { en: "Nice to meet you.", tr: "Tanıştığıma memnun oldum." }
+];
+
 // ==========================================
 // APP STATE
 // ==========================================
@@ -130,6 +148,81 @@ const App = {
       }, 50);
       setTimeout(() => p.remove(), 1050);
     }
+  },
+
+  playDailyEnglish() {
+    SoundEngine.click();
+    if (this.currentDailyEnglish) {
+       SoundEngine.speakEnglish(this.currentDailyEnglish);
+    }
+  },
+
+  recordDailyEnglish() {
+    const btn = document.getElementById('record-en-btn');
+    const feedback = document.getElementById('record-en-feedback');
+    
+    if (!this.currentDailyEnglish) return;
+    
+    SoundEngine.listenEnglish(
+      this.currentDailyEnglish, 
+      (result) => {
+        // Result callback
+        if (result.isMatch) {
+          btn.style.backgroundColor = 'var(--color-emerald)';
+          btn.textContent = '✅';
+          feedback.textContent = 'Harika telaffuz! 🌟';
+          feedback.style.color = 'var(--color-emerald)';
+          SoundEngine.correct();
+          
+          if (typeof confetti !== 'undefined') {
+            confetti({ particleCount: 50, spread: 70, origin: { x: btn.getBoundingClientRect().left / window.innerWidth, y: btn.getBoundingClientRect().top / window.innerHeight } });
+          } else {
+            this.showMiniConfetti(btn);
+          }
+        } else {
+          btn.style.backgroundColor = 'var(--color-coral)';
+          btn.textContent = '❌';
+          feedback.textContent = `Duyduğum: "${result.transcript}". Bir daha dene!`;
+          feedback.style.color = 'var(--color-coral)';
+          SoundEngine.wrong();
+        }
+        
+        // Reset after 3.5 seconds
+        setTimeout(() => {
+          btn.style.backgroundColor = 'var(--color-primary)';
+          btn.textContent = '🎤';
+          feedback.textContent = 'Mikrofona tıklayıp cümleyi tekrar et ✨';
+          feedback.style.color = 'var(--color-text-secondary)';
+        }, 3500);
+      },
+      () => {
+        // On Start
+        btn.style.backgroundColor = 'var(--color-gold)';
+        btn.textContent = '👂';
+        try { btn.classList.add('pulse'); } catch(e){}
+        feedback.textContent = 'Seni dinliyorum...';
+        feedback.style.color = 'var(--color-gold)';
+        SoundEngine.click();
+      },
+      () => {
+        // On End
+        try { btn.classList.remove('pulse'); } catch(e){}
+      },
+      (error) => {
+        // On Error
+        try { btn.classList.remove('pulse'); } catch(e){}
+        if (error === 'not-supported') {
+           feedback.textContent = 'Tarayıcın mikrofon desteklemiyor :(';
+        } else if (error === 'not-allowed') {
+           feedback.textContent = 'Lütfen mikrofona izin ver!';
+        } else {
+           feedback.textContent = 'Sesini alamadım, tekrar dene!';
+           btn.style.backgroundColor = 'var(--color-primary)';
+           btn.textContent = '🎤';
+        }
+        feedback.style.color = 'var(--color-coral)';
+      }
+    );
   },
 
   createSparkles() {
@@ -268,6 +361,16 @@ const App = {
     // Refresh profile data
     this.currentProfile = ProgressManager.getProfile(p.id);
     const profile = this.currentProfile;
+
+    // Daily English exposure
+    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+    const phrase = DAILY_ENGLISH_PHRASES[dayOfYear % DAILY_ENGLISH_PHRASES.length];
+    const enTextEl = document.getElementById('daily-en-text');
+    if (enTextEl) {
+        enTextEl.textContent = phrase.en;
+        document.getElementById('daily-tr-text').textContent = phrase.tr;
+        this.currentDailyEnglish = phrase.en;
+    }
 
     // Greeting
     const hour = new Date().getHours();
@@ -1143,6 +1246,123 @@ const App = {
     SoundEngine.stopSpeak();
     if (this.checkBreak(() => this.showScreen('subject'))) return;
     this.showScreen('subject');
+  },
+
+  // ==========================================
+  // STORIES MODULE
+  // ==========================================
+  openStoriesList() {
+    SoundEngine.click();
+    this.showScreen('stories-list');
+    this.renderStoriesList();
+  },
+
+  renderStoriesList() {
+    const container = document.getElementById('stories-grid');
+    if (!container || typeof storiesData === 'undefined') return;
+    
+    const readStories = this.currentProfile.readStories || [];
+    
+    container.innerHTML = storiesData.map(story => {
+      const isRead = readStories.includes(story.id);
+      return `
+      <div class="card-story bounce-hover" onclick="App.openStory('${story.id}')" style="position:relative; opacity: ${isRead ? '0.85' : '1'}">
+        ${isRead ? '<div style="position:absolute; top:8px; right:8px; background:var(--color-emerald); color:white; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1)">Okundu ✅</div>' : ''}
+        <div class="story-icon">${story.cover}</div>
+        <div class="story-title">${story.title}</div>
+        <div class="story-info" style="margin-top:var(--space-2)">${story.pages.length} Sayfa</div>
+      </div>
+    `}).join('');
+  },
+
+  openStory(storyId) {
+    SoundEngine.click();
+    const story = storiesData.find(s => s.id === storyId);
+    if (!story) return;
+
+    this.currentStory = {
+      ...story,
+      currentPage: 0
+    };
+    
+    this.showScreen('story-reader');
+    this.renderStoryPage();
+  },
+
+  renderStoryPage() {
+    const cs = this.currentStory;
+    if (!cs) return;
+
+    document.getElementById('story-reader-title').textContent = cs.cover + ' ' + cs.title;
+    document.getElementById('story-page-counter').textContent = `Sayfa ${cs.currentPage + 1} / ${cs.pages.length}`;
+    
+    const pct = ((cs.currentPage + 1) / cs.pages.length) * 100;
+    document.getElementById('story-progress-fill').style.width = pct + '%';
+    
+    document.getElementById('story-page-text').textContent = cs.pages[cs.currentPage];
+    
+    const prevBtn = document.getElementById('story-prev-btn');
+    const nextBtn = document.getElementById('story-next-btn');
+
+    if (cs.currentPage > 0) {
+      prevBtn.classList.remove('hidden');
+    } else {
+      prevBtn.classList.add('hidden');
+    }
+
+    if (cs.currentPage < cs.pages.length - 1) {
+      nextBtn.textContent = 'İleri →';
+      nextBtn.classList.remove('btn-gold');
+      nextBtn.classList.add('btn-primary');
+    } else {
+      nextBtn.textContent = 'Hikayeyi Bitir ✨';
+      nextBtn.classList.remove('btn-primary');
+      nextBtn.classList.add('btn-gold');
+    }
+
+    // Sesli oku
+    setTimeout(() => SoundEngine.speak(cs.pages[cs.currentPage]), 300);
+  },
+
+  nextStoryPage() {
+    SoundEngine.click();
+    SoundEngine.stopSpeak();
+    const cs = this.currentStory;
+    if (cs.currentPage < cs.pages.length - 1) {
+      cs.currentPage++;
+      this.renderStoryPage();
+    } else {
+      this.finishStory();
+    }
+  },
+
+  prevStoryPage() {
+    SoundEngine.click();
+    SoundEngine.stopSpeak();
+    const cs = this.currentStory;
+    if (cs.currentPage > 0) {
+      cs.currentPage--;
+      this.renderStoryPage();
+    }
+  },
+
+  finishStory() {
+    SoundEngine.levelUp();
+    this.showConfetti();
+    
+    ProgressManager.markStoryRead(this.currentProfile.id, this.currentStory.id);
+    
+    // Ödül: 5 yıldız
+    const points = 5;
+    ProgressManager.addPoints(this.currentProfile.id, points);
+    this.currentProfile = ProgressManager.getProfile(this.currentProfile.id);
+    
+    this.showPointsFloat(points);
+    this.showToast('📚', 'Harika okudun! +5 Yıldız kazandın.');
+    
+    setTimeout(() => {
+      this.openStoriesList();
+    }, 2500);
   },
 
   // ==========================================

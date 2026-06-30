@@ -24,6 +24,7 @@ const ProgressManager = {
       streak: 0,
       lastPlayDate: null,
       badges: [],
+      readStories: [],
       subjectProgress: {
         math: { 'dogal-sayilar': { completed: [], bestScore: 0 }, 'toplama-cikarma': { completed: [], bestScore: 0 } },
         english: { 'greetings': { completed: [], bestScore: 0 }, 'numbers': { completed: [], bestScore: 0 } },
@@ -109,6 +110,7 @@ const ProgressManager = {
     p.totalStars = 0;
     p.totalPoints = 0;
     p.badges = [];
+    p.readStories = [];
     p.subjectProgress = {
       math: {}, english: {}, turkish: {}, life: {}
     };
@@ -117,6 +119,18 @@ const ProgressManager = {
     this.save(data);
     return p;
   },
+
+  markStoryRead(profileId, storyId) {
+    const data = this.load();
+    const profile = data.profiles.find(p => p.id === profileId);
+    if (!profile) return;
+    if (!profile.readStories) profile.readStories = [];
+    if (!profile.readStories.includes(storyId)) {
+      profile.readStories.push(storyId);
+      this.save(data);
+    }
+  },
+
   addPoints(profileId, points) {
     const profile = this.getProfile(profileId);
     if (!profile) return;

@@ -50,6 +50,8 @@ const ENGLISH_QUESTIONS = {
         { id: 'eng-fr-005', type: 'multiple-choice', difficulty: 1, question: '"How are you?" ne demektir?', options: ['Adın ne', 'Nasılsın', 'Otur', 'Günaydın'], correct: 'Nasılsın', hint: 'Hatır sormaktır.', points: 10 },
         { id: 'eng-fr-006', type: 'fill-blank', difficulty: 2, question: '"I am fine" (İyiyim) demek için _____ fine deriz. (Eksik kelimeyi yazın)', correct: ['i am', 'I am', 'Iam'], hint: 'Ben anlamına gelir.', points: 15 },
         { id: 'eng-fr-007', type: 'multiple-choice', difficulty: 1, question: 'Ayrılırken ne söyleriz?', options: ['Hello', 'Good morning', 'Goodbye', 'Name'], correct: 'Goodbye', hint: 'Hoşçakal anlamındadır.', points: 10 },
+        { id: 'eng-fr-dialogue-1', type: 'multiple-choice', difficulty: 2, question: 'Ali: "Hello, my name is Ali."\nAyşe: "____, my name is Ayşe." (Boşluğa ne gelmeli?)', options: ['Goodbye', 'How', 'Hi', 'Fine'], correct: 'Hi', hint: 'Merhaba anlamına gelen kelime.', points: 15, englishText: 'Hi, my name is Ayşe' },
+        { id: 'eng-fr-listen-2', type: 'audio-question', difficulty: 2, englishText: 'Hello, how are you?', question: 'Duyduğun arkadaşça soruya nasıl cevap verirsin?', options: ['My name is Ali', 'I am fine, thank you', 'Good morning', 'Goodbye'], correct: 'I am fine, thank you', hint: 'Nasılsın sorusuna karşılık.', points: 20 },
         { id: 'eng-fr-008', type: 'match', difficulty: 2, question: 'Karşılıkları eşleştir!', pairs: [{left: 'Hello', right: 'Hi'}, {left: 'Goodbye', right: 'Bye'}, {left: 'How are you?', right: 'Fine, thanks!'}], points: 20 }
       ]
     },
@@ -72,7 +74,9 @@ const ENGLISH_QUESTIONS = {
         { id: 'eng-clr-005', type: 'multiple-choice', difficulty: 1, question: '"Sit down" ne demektir?', options: ['Uyu', 'Ayağa kalk', 'Otur', 'Oku'], correct: 'Otur', hint: 'Sit = Oturmak.', points: 10 },
         { id: 'eng-clr-006', type: 'true-false', difficulty: 1, question: '"Open your book" Kitabını aç demektir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', hint: 'Open = Açmak.', points: 10 },
         { id: 'eng-clr-007', type: 'fill-blank', difficulty: 2, question: 'Öğretmen kelimesinin İngilizcesi _____ dır.', correct: ['teacher'], hint: 'T ile başlar.', points: 15 },
-        { id: 'eng-clr-008', type: 'multiple-choice', difficulty: 2, question: 'Aşağıdakilerden hangisi çizecek (boya) kalemidir?', options: ['Pencil', 'Eraser', 'Crayon', 'Board'], correct: 'Crayon', hint: 'C ile başlar.', points: 15 }
+        { id: 'eng-clr-008', type: 'multiple-choice', difficulty: 2, question: 'Aşağıdakilerden hangisi çizecek (boya) kalemidir?', options: ['Pencil', 'Eraser', 'Crayon', 'Board'], correct: 'Crayon', hint: 'C ile başlar.', points: 15 },
+        { id: 'eng-clr-listen-1', type: 'audio-question', difficulty: 2, englishText: 'Stand up, please.', question: 'Öğretmen sana sınıfta ne yapmanı söyledi?', options: ['Ayağa kalk', 'Otur', 'Kitabını aç', 'Dışarı çık'], correct: 'Ayağa kalk', hint: 'Stand kalkmak demek.', points: 20 },
+        { id: 'eng-clr-dialogue-1', type: 'multiple-choice', difficulty: 2, question: 'Öğretmen: "Open your book." dedi. Sen ne yapmalısın?', options: ['Kapıyı açmalıyım', 'Kitabımı açmalıyım', 'Oturmalıyım', 'Deftere yazmalıyım'], correct: 'Kitabımı açmalıyım', hint: 'Book.', points: 15, englishText: 'Open your book.' }
       ]
     },
     {
@@ -135,7 +139,9 @@ const ENGLISH_QUESTIONS = {
         { id: 'eng-play-004', type: 'true-false', question: 'Koşmak "Run" demektir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
         { id: 'eng-play-005', type: 'match', question: 'Oyunları eşleştir!', pairs: [{left: 'Hide and seek', right: 'Saklambaç'}, {left: 'Jump rope', right: 'İp atlamak'}], points: 20 },
         { id: 'eng-play-006', type: 'multiple-choice', question: 'Top nedir?', options: ['Doll', 'Ball', 'Car', 'Kite'], correct: 'Ball', points: 10 },
-        { id: 'eng-play-007', type: 'fill-blank', question: '"Let\'s play!" ne anlama gelir?', correct: ['hadi oynayalım', 'oynayalım'], hint: 'Oyun oynamaya davet!', points: 20 }
+        { id: 'eng-play-007', type: 'fill-blank', question: '"Let\'s play!" ne anlama gelir?', correct: ['hadi oynayalım', 'oynayalım'], hint: 'Oyun oynamaya davet!', points: 20 },
+        { id: 'eng-play-listen-1', type: 'audio-question', difficulty: 2, englishText: 'Jump!', question: 'Öğretmen sana hangi hareketi yapmanı söyledi?', options: ['Zıpla', 'Koş', 'Otur', 'Uyu'], correct: 'Zıpla', hint: 'J harfiyle başlayan bir hareket komutu.', points: 20 },
+        { id: 'eng-play-listen-2', type: 'audio-question', difficulty: 2, englishText: "Let's play!", question: 'Duyduğun cümle ne anlama gelir?', options: ['Hadi oynayalım!', 'Oyun bitti.', 'Dur orada.', 'Eve dönelim.'], correct: 'Hadi oynayalım!', hint: 'Arkadaşları oyuna davet ederiz.', points: 20 }
       ]
     },
     {
@@ -155,7 +161,9 @@ const ENGLISH_QUESTIONS = {
         { id: 'eng-bd-005', type: 'multiple-choice', question: 'Omuz nedir?', options: ['Knee', 'Toe', 'Shoulder', 'Arm'], correct: 'Shoulder', points: 15 },
         { id: 'eng-bd-006', type: 'multiple-choice', question: 'Hangisi bacak demektir?', options: ['Leg', 'Arm', 'Nose', 'Eye'], correct: 'Leg', points: 10 },
         { id: 'eng-bd-007', type: 'fill-blank', question: 'Kol kelimesinin İngilizcesi _____ dır.', correct: ['arm'], hint: 'A ile başlar.', points: 15 },
-        { id: 'eng-bd-008', type: 'true-false', question: '"Touch your nose" Burnuna dokun demektir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 }
+        { id: 'eng-bd-008', type: 'true-false', question: '"Touch your nose" Burnuna dokun demektir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
+        { id: 'eng-bd-listen-1', type: 'audio-question', difficulty: 2, englishText: 'Touch your nose!', question: 'Duyduğun komutta hangi uzva dokunman gerekiyor?', options: ['Burun', 'Kulak', 'Göz', 'Ağız'], correct: 'Burun', hint: 'Nose = Burun!', points: 20 },
+        { id: 'eng-bd-listen-2', type: 'audio-question', difficulty: 2, englishText: 'Clap your hands!', question: 'Bu komut senden ne yapmanı istiyor?', options: ['Ellerini çırp', 'Ayağa kalk', 'Burnuna dokun', 'Gözlerini kapat'], correct: 'Ellerini çırp', hint: 'Clap = çırpmak, hands = eller.', points: 20 }
       ]
     },
     {
@@ -175,7 +183,9 @@ const ENGLISH_QUESTIONS = {
         { id: 'eng-pet-005', type: 'true-false', question: '"Turtle" kaplumbağa demektir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
         { id: 'eng-pet-006', type: 'fill-blank', question: 'Kuş kelimesinin İngilizcesi _____ dir.', correct: ['bird'], hint: 'B ile başlar.', points: 15 },
         { id: 'eng-pet-007', type: 'multiple-choice', question: 'Fare hangisidir?', options: ['Mouse', 'Cat', 'Dog', 'Bird'], correct: 'Mouse', points: 15 },
-        { id: 'eng-pet-008', type: 'true-false', question: 'Fish suda yaşar ve yüzer.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 }
+        { id: 'eng-pet-008', type: 'true-false', question: 'Fish suda yaşar ve yüzer.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
+        { id: 'eng-pet-listen-1', type: 'audio-question', difficulty: 2, englishText: 'Cat', question: 'Duyduğun kelime hangi hayvandır?', options: ['Kedi', 'Köpek', 'Kuş', 'Balık'], correct: 'Kedi', hint: 'Miyav diye ses çıkarır.', points: 20 },
+        { id: 'eng-pet-listen-2', type: 'audio-question', difficulty: 2, englishText: 'I have a dog.', question: 'Bu cümlede kişinin evcil hayvanı nedir?', options: ['Köpek', 'Kedi', 'Tavşan', 'Balık'], correct: 'Köpek', hint: 'Dog = Köpek.', points: 20 }
       ]
     },
     {
@@ -195,7 +205,9 @@ const ENGLISH_QUESTIONS = {
         { id: 'eng-frt-005', type: 'fill-blank', question: 'Karpuzun İngilizcesi _____ dır.', correct: ['watermelon'], hint: 'water ile başlar!', points: 20 },
         { id: 'eng-frt-006', type: 'multiple-choice', question: 'Strawberry nedir?', options: ['Çilek', 'Elma', 'Kiraz', 'Erik'], correct: 'Çilek', points: 15 },
         { id: 'eng-frt-007', type: 'multiple-choice', question: 'Hangi meyve sarı renklidir?', options: ['Apple', 'Strawberry', 'Banana', 'Grapes'], correct: 'Banana', points: 10 },
-        { id: 'eng-frt-008', type: 'true-false', question: 'Limon İngilizcede "Lemon" diye yazılır.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 }
+        { id: 'eng-frt-008', type: 'true-false', question: 'Limon İngilizcede "Lemon" diye yazılır.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
+        { id: 'eng-frt-listen-1', type: 'audio-question', difficulty: 2, englishText: 'Apple', question: 'Duyduğun kelime hangi meyvedir?', options: ['Elma', 'Muz', 'Portakal', 'Çilek'], correct: 'Elma', hint: 'A harfiyle başlar, kırmızı veya yeşil olur.', points: 20 },
+        { id: 'eng-frt-listen-2', type: 'audio-question', difficulty: 2, englishText: 'I like bananas!', question: 'Bu cümlede sevilen meyve hangisidir?', options: ['Muz', 'Elma', 'Üzüm', 'Limon'], correct: 'Muz', hint: 'Banana = Muz.', points: 20 }
       ]
     },
     {
@@ -215,7 +227,9 @@ const ENGLISH_QUESTIONS = {
         { id: 'eng-ani-005', type: 'true-false', question: '"Snake" yılan demektir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
         { id: 'eng-ani-006', type: 'fill-blank', question: 'At kelimesinin İngilizcesi _____ dir.', correct: ['horse'], hint: 'H ile başlar.', points: 15 },
         { id: 'eng-ani-007', type: 'multiple-choice', question: 'Hangisi siyah beyaz çizgili çizgili hayvandır?', options: ['Zebra', 'Lion', 'Tiger', 'Bear'], correct: 'Zebra', points: 10 },
-        { id: 'eng-ani-008', type: 'true-false', question: '"Bear" ayı anlamına gelir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 }
+        { id: 'eng-ani-008', type: 'true-false', question: '"Bear" ayı anlamına gelir.', options: ['Doğru', 'Yanlış'], correct: 'Doğru', points: 10 },
+        { id: 'eng-ani-listen-1', type: 'audio-question', difficulty: 2, englishText: 'Elephant', question: 'Duyduğun kelime hangi hayvandır?', options: ['Fil', 'Aslan', 'Kaplan', 'Maymun'], correct: 'Fil', hint: 'En büyük kara hayvanıdır.', points: 20 },
+        { id: 'eng-ani-listen-2', type: 'audio-question', difficulty: 2, englishText: 'The lion is big!', question: 'Bu cümlede hangi hayvan büyük olarak anlatılıyor?', options: ['Aslan', 'Fil', 'Zürafa', 'Kaplan'], correct: 'Aslan', hint: 'Lion = Aslan.', points: 20 }
       ]
     }
   ]

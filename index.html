@@ -82,6 +82,30 @@
           <h2 id="dash-greeting" class="greeting-text">Merhaba! ✨</h2>
         </div>
 
+        <!-- Daily English Exposure -->
+        <div id="dash-daily-english" class="card" style="background: linear-gradient(135deg, #FFFDF5, #FAD7A1); border: 2px solid #F39C12; padding: var(--space-4); margin-bottom: var(--space-6); display: flex; flex-direction: column; position: relative; overflow: hidden;">
+           <div style="position: absolute; right: -20px; top: -20px; font-size: 5rem; opacity: 0.1; pointer-events: none;">🇬🇧</div>
+           
+           <!-- Top part: Sentence & Listen -->
+           <div style="display: flex; align-items: center; justify-content: space-between; z-index: 1;">
+              <div>
+                 <div style="font-size: var(--text-sm); font-weight: bold; color: #D35400; margin-bottom: 4px;">🎯 Günün İngilizce Cümlesi</div>
+                 <div id="daily-en-text" style="font-size: var(--text-2xl); font-family: var(--font-display); font-weight: 800; color: #C0392B;">Good morning!</div>
+                 <div id="daily-tr-text" style="font-size: var(--text-base); font-weight: 600; color: #7F8C8D; margin-top: 2px;">Günaydın!</div>
+              </div>
+              <button class="btn btn-ghost bounce-hover" style="border-radius: 50%; width: 64px; height: 64px; font-size: 2rem; border-color: #F39C12; background: white; z-index: 1; flex-shrink: 0;" onclick="App.playDailyEnglish()">🔊</button>
+           </div>
+           
+           <!-- Bottom part: Speak & Practice -->
+           <div style="margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px dashed rgba(243,156,18,0.4); display: flex; align-items: center; gap: var(--space-3); z-index: 1;">
+              <button id="record-en-btn" class="btn shimmer bounce-hover" style="border-radius: 50%; width: 50px; height: 50px; font-size: 1.5rem; background-color: var(--color-primary); color: white; display: flex; align-items: center; justify-content: center; padding: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: none;" onclick="App.recordDailyEnglish()">🎤</button>
+              <div style="flex: 1;">
+                 <div style="font-size: var(--text-sm); font-weight: bold; color: var(--color-text);">Sıra Sende!</div>
+                 <div id="record-en-feedback" style="font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.2;">Mikrofona tıklayıp cümleyi tekrar et ✨</div>
+              </div>
+           </div>
+        </div>
+
         <!-- Daily Quests -->
         <div class="daily-quest-panel" style="margin-bottom:var(--space-6)">
           <h4 style="margin-bottom:var(--space-3)">📋 Günlük Görevler</h4>
@@ -117,6 +141,16 @@
           </div>
         </div>
 
+        </div>
+
+        <!-- Stories / Reading Corner -->
+        <h3 style="margin-top:var(--space-6); margin-bottom:var(--space-4)">📚 Okuma Köşesi</h3>
+        <div class="card bounce-hover" style="background: linear-gradient(135deg, #FDF4FF, #F3E8FF); border: 2px solid #D8B4FE; padding: var(--space-4); margin-bottom: var(--space-6); display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="App.openStoriesList()">
+           <div>
+              <h4 style="color: #6B21A8; margin-bottom: 4px; font-size: var(--text-lg)">Eğitici Hikayeler</h4>
+              <p style="font-size: var(--text-sm); color: #9333EA;">Her gün yeni bir hikaye oku, sürpriz yıldız kazan! ✨</p>
+           </div>
+           <div style="font-size: 3rem;">📖</div>
         </div>
 
         <!-- Study Plan / Recommendations -->
@@ -463,6 +497,59 @@
       </div>
     </div>
 
+    <!-- ========== STORIES LIST SCREEN ========== -->
+    <div id="screen-stories-list" class="screen">
+      <div class="container" style="max-width:800px;width:100%">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.goToDashboard()">← Ana Sayfa</button>
+        </div>
+        <div class="text-center" style="margin-bottom:var(--space-6)">
+          <h2>📚 Eğitici Hikayeler</h2>
+          <p style="color:var(--color-text-secondary)">Okumayı çok seviyoruz! İstediğin hikayeyi seç ve başla.</p>
+        </div>
+        <div id="stories-grid" class="grid grid-3 gap-4 stagger-children"></div>
+        <div class="text-center" style="margin-top:var(--space-8)">
+          <button class="btn btn-ghost" onclick="App.goToDashboard()">← Ana Sayfaya Dön</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== STORY READER SCREEN ========== -->
+    <div id="screen-story-reader" class="screen">
+      <div class="container" style="max-width:700px;width:100%;padding-top:0">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.showScreen('stories-list')">✕ Çık</button>
+          <div style="text-align:center;flex:1">
+            <div id="story-reader-title" style="font-family:var(--font-display);font-weight:600;font-size:var(--text-lg)">Hikaye Adı</div>
+          </div>
+          <div style="width:60px"></div>
+        </div>
+
+        <!-- Progress -->
+        <div style="margin-bottom:var(--space-6)">
+          <div class="flex justify-between items-center" style="margin-bottom:var(--space-2)">
+            <span id="story-page-counter" class="question-counter" style="color:var(--color-primary)">Sayfa 1 / 5</span>
+          </div>
+          <div class="progress-bar small">
+            <div class="progress-fill" id="story-progress-fill" style="width:0%; background:var(--color-primary)"></div>
+          </div>
+        </div>
+
+        <!-- Reading Area -->
+        <div class="story-area card" style="background:var(--color-bg-alt); border:3px solid var(--color-primary-light); min-height:300px; display:flex; flex-direction:column; justify-content:center; padding:var(--space-6);">
+          <div id="story-page-text" style="font-size:calc(var(--text-2xl) * 0.9); line-height:1.8; font-family:var(--font-display); color:var(--color-text); text-align:center;">
+             Hikaye metni buraya gelecek...
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex gap-4" style="margin-top:var(--space-8)">
+          <button id="story-prev-btn" class="btn btn-secondary w-full" onclick="App.prevStoryPage()">← Geri</button>
+          <button id="story-next-btn" class="btn btn-primary w-full shimmer" onclick="App.nextStoryPage()">İleri →</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ========== MODALS ========== -->
 
     <!-- Avatar Editor Modal -->
@@ -514,6 +601,7 @@
   <script src="js/data/english-questions.js"></script>
   <script src="js/data/turkish-questions.js"></script>
   <script src="js/data/life-questions.js"></script>
+  <script src="js/data/stories.js"></script>
   <script src="js/sound.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/app.js"></script>
