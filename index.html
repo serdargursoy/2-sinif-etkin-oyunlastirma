@@ -588,10 +588,24 @@
 
         <div id="song-youtube-wrapper" class="youtube-wrapper" style="margin-bottom:var(--space-4)"></div>
 
-        <div class="flex justify-center gap-2" style="margin-bottom:var(--space-4)">
-          <button id="song-lang-both" class="btn btn-primary btn-sm" onclick="App.setSongLang('both')">TR + EN</button>
-          <button id="song-lang-en" class="btn btn-ghost btn-sm" onclick="App.setSongLang('en')">English</button>
-          <button id="song-lang-tr" class="btn btn-ghost btn-sm" onclick="App.setSongLang('tr')">Türkçe</button>
+        <!-- Karaoke Bar -->
+        <div id="song-karaoke-bar" class="hidden" style="background:linear-gradient(135deg,#FF69B4,#9B59B6);border-radius:var(--radius-xl);padding:var(--space-4);margin-bottom:var(--space-4);text-align:center;color:white;box-shadow:var(--shadow-lg)">
+          <div id="song-karaoke-line" style="font-size:var(--text-lg);font-weight:800;line-height:1.4;margin-bottom:var(--space-3);min-height:2rem">🎵</div>
+          <div class="flex justify-center items-center gap-3">
+            <button class="btn btn-sm" style="background:rgba(255,255,255,0.25);color:white;border:none;min-width:76px" onclick="App.karaokeNav(-1)">◀ Geri</button>
+            <span id="song-karaoke-counter" style="font-size:var(--text-sm);font-weight:bold;opacity:0.8;min-width:48px;text-align:center">1/1</span>
+            <button class="btn btn-sm" style="background:rgba(255,255,255,0.25);color:white;border:none;min-width:76px" onclick="App.karaokeNav(1)">İleri ▶</button>
+          </div>
+        </div>
+
+        <!-- Language + Karaoke Toggle -->
+        <div class="flex justify-between items-center" style="margin-bottom:var(--space-4)">
+          <div class="flex gap-2">
+            <button id="song-lang-both" class="btn btn-primary btn-sm" onclick="App.setSongLang('both')">TR + EN</button>
+            <button id="song-lang-en" class="btn btn-ghost btn-sm" onclick="App.setSongLang('en')">English</button>
+            <button id="song-lang-tr" class="btn btn-ghost btn-sm" onclick="App.setSongLang('tr')">Türkçe</button>
+          </div>
+          <button id="song-karaoke-btn" class="btn btn-ghost btn-sm" onclick="App.toggleKaraoke()">🎤 Karaoke</button>
         </div>
 
         <div id="song-lyrics" class="lyrics-container" style="margin-bottom:var(--space-6)"></div>

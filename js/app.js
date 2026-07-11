@@ -1742,7 +1742,20 @@ const App = {
       quizBtn.textContent = '🎯 Quiz Yap!';
       quizBtn.classList.add('shimmer');
     }
-    this.setSongLang(song.lang || 'both');
+    // Reset karaoke state
+    this.currentSong.karaokeMode = false;
+    this.currentSong.karaokeIdx = 0;
+    const bar = document.getElementById('song-karaoke-bar');
+    const kBtn = document.getElementById('song-karaoke-btn');
+    if (bar) bar.classList.add('hidden');
+    if (kBtn) { kBtn.textContent = '🎤 Karaoke'; kBtn.className = 'btn btn-ghost btn-sm'; }
+    // Auto-detect language: if no EN lines, default to TR
+    const hasEN = song.lines && song.lines.some(l => l.en);
+    const langBothBtn = document.getElementById('song-lang-both');
+    const langEnBtn = document.getElementById('song-lang-en');
+    if (langBothBtn) langBothBtn.style.display = hasEN ? '' : 'none';
+    if (langEnBtn) langEnBtn.style.display = hasEN ? '' : 'none';
+    this.setSongLang(hasEN ? 'both' : 'tr');
   },
 
   setSongLang(lang) {
@@ -1759,11 +1772,77 @@ const App = {
       container.innerHTML = '<div class="card" style="text-align:center;padding:var(--space-8);background:var(--color-bg-alt)"><div style="font-size:3rem;margin-bottom:var(--space-4)">🎵</div><p style="color:var(--color-text-secondary)">Bu şarkının sözleri yakında eklenecek!</p></div>';
       return;
     }
-    container.innerHTML = lines.map(line => {
-      if (lang === 'en') return '<div class="lyric-line"><div class="lyric-en">' + line.en + '</div></div>';
-      if (lang === 'tr') return '<div class="lyric-line"><div class="lyric-en" style="color:var(--color-text)">' + line.tr + '</div></div>';
-      return '<div class="lyric-line"><div class="lyric-en">' + line.en + '</div><div class="lyric-tr">' + line.tr + '</div></div>';
-    }).join('');
+    let html = '';
+    let lastSection = '';
+    lines.forEach(line => {
+      if (line.section && line.section !== lastSection) {
+        lastSection = line.section;
+        html += '<div class="lyric-section-label">' + line.section + '</div>';
+      }
+      if (lang === 'en') {
+        const text = line.en || '<em style="opacity:0.5;font-size:var(--text-sm)">İngilizce ekleniyor...</em>';
+        html += '<div class="lyric-line"><div class="lyric-en">' + text + '</div></div>';
+      } else if (lang === 'tr') {
+        html += '<div class="lyric-line"><div class="lyric-en" style="color:var(--color-text)">' + line.tr + '</div></div>';
+      } else {
+        if (line.en) {
+          html += '<div class="lyric-line"><div class="lyric-en">' + line.en + '</div><div class="lyric-tr">' + line.tr + '</div></div>';
+        } else {
+          html += '<div class="lyric-line"><div class="lyric-en">' + line.tr + '</div></div>';
+        }
+      }
+    });
+    container.innerHTML = html;
+    if (this.currentSong.karaokeMode) this.updateKaraokeLine();
+  },
+
+  toggleKaraoke() {
+    const song = this.currentSong;
+    if (!song || !song.lines || song.lines.length === 0) return;
+    song.karaokeMode = !song.karaokeMode;
+    const bar = document.getElementById('song-karaoke-bar');
+    const btn = document.getElementById('song-karaoke-btn');
+    if (song.karaokeMode) {
+      if (bar) bar.classList.remove('hidden');
+      if (btn) { btn.textContent = '🎤 Kapat'; btn.className = 'btn btn-primary btn-sm'; }
+      this.updateKaraokeLine();
+    } else {
+      if (bar) bar.classList.add('hidden');
+      if (btn) { btn.textContent = '🎤 Karaoke'; btn.className = 'btn btn-ghost btn-sm'; }
+      document.querySelectorAll('#song-lyrics .lyric-line.active').forEach(el => el.classList.remove('active'));
+    }
+    SoundEngine.click();
+  },
+
+  karaokeNav(dir) {
+    const song = this.currentSong;
+    if (!song || !song.lines) return;
+    const lines = song.lines.filter(l => !l.section || l.tr); // only content lines for counting
+    // Count actual lyric-line elements (skip section labels)
+    const lyricEls = document.querySelectorAll('#song-lyrics .lyric-line');
+    const maxIdx = lyricEls.length - 1;
+    song.karaokeIdx = Math.max(0, Math.min((song.karaokeIdx || 0) + dir, maxIdx));
+    this.updateKaraokeLine();
+    SoundEngine.click();
+  },
+
+  updateKaraokeLine() {
+    const song = this.currentSong;
+    if (!song || !song.lines) return;
+    const lyricEls = document.querySelectorAll('#song-lyrics .lyric-line');
+    const idx = song.karaokeIdx || 0;
+    const total = lyricEls.length;
+    // Find corresponding data line (skip section-only entries)
+    const dataLines = song.lines.filter(l => l.tr);
+    const line = dataLines[idx];
+    if (!line) return;
+    const displayText = (song.lang === 'en' && line.en) ? line.en : line.tr;
+    const karaokeLineEl = document.getElementById('song-karaoke-line');
+    const counterEl = document.getElementById('song-karaoke-counter');
+    if (karaokeLineEl) karaokeLineEl.textContent = displayText;
+    if (counterEl) counterEl.textContent = (idx + 1) + ' / ' + total;
+    lyricEls.forEach((el, i) => el.classList.toggle('active', i === idx));
+    if (lyricEls[idx]) lyricEls[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   },
 
   startSongQuiz() {
