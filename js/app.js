@@ -286,7 +286,10 @@ const App = {
       'quiz': () => this.renderQuiz(),
       'quiz-result': () => this.renderQuizResult(),
       'badges': () => this.renderBadges(),
-      'parent': () => this.renderParent()
+      'parent': () => this.renderParent(),
+      'songs-list': () => this.renderSongsList(),
+      'song-player': () => this.renderSongPlayer(),
+      'song-quiz': () => this.renderSongQuiz()
     };
     if (renderers[screenId]) renderers[screenId]();
     
@@ -1684,6 +1687,196 @@ const App = {
       SoundEngine.stopSpeak();
       this.showScreen('subject');
     }
+  },
+
+  // ==========================================
+  // SONGS MODULE
+  // ==========================================
+  openSongsList() {
+    SoundEngine.click();
+    this.showScreen('songs-list');
+  },
+
+  renderSongsList() {
+    const container = document.getElementById('songs-grid');
+    if (!container || typeof SONGS_DATA === 'undefined') return;
+    container.innerHTML = SONGS_DATA.map(song => {
+      const stars = '⭐'.repeat(song.difficulty);
+      return `
+        <div class="song-card" onclick="App.openSong('${song.id}')">
+          ${song.comingSoon ? '<div class="song-card-coming-soon">Yakında ✨</div>' : ''}
+          <span class="song-card-cover">${song.coverEmoji}</span>
+          <span class="song-tag" style="background:${song.tagColor}">${song.tag}</span>
+          <div class="song-card-title">${song.title}</div>
+          <div class="song-card-artist">${song.artist}</div>
+          <div style="margin:var(--space-1) 0">${stars}</div>
+          <div style="font-size:var(--text-xs);color:var(--color-text-secondary);margin-top:var(--space-2)">
+            ${song.lines.length > 0 ? song.lines.length + ' satır söz' : 'Sözler ekleniyor...'}
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  openSong(id) {
+    SoundEngine.click();
+    const song = SONGS_DATA.find(s => s.id === id);
+    if (!song) return;
+    this.currentSong = { ...song, lang: 'both' };
+    this.showScreen('song-player');
+  },
+
+  renderSongPlayer() {
+    const song = this.currentSong;
+    if (!song) return;
+    document.getElementById('song-player-title').textContent = song.coverEmoji + ' ' + song.title;
+    document.getElementById('song-youtube-wrapper').innerHTML =
+      '<iframe src="https://www.youtube.com/embed/' + song.youtubeId + '?rel=0&modestbranding=1" allowfullscreen allow="autoplay; encrypted-media"></iframe>';
+    const quizBtn = document.getElementById('song-quiz-btn');
+    if (!song.quiz || song.quiz.length === 0) {
+      quizBtn.disabled = true;
+      quizBtn.textContent = '🔒 Quiz Yakında Geliyor';
+      quizBtn.classList.remove('shimmer');
+    } else {
+      quizBtn.disabled = false;
+      quizBtn.textContent = '🎯 Quiz Yap!';
+      quizBtn.classList.add('shimmer');
+    }
+    this.setSongLang(song.lang || 'both');
+  },
+
+  setSongLang(lang) {
+    if (!this.currentSong) return;
+    this.currentSong.lang = lang;
+    ['both', 'en', 'tr'].forEach(l => {
+      const btn = document.getElementById('song-lang-' + l);
+      if (btn) btn.className = (l === lang ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm');
+    });
+    const container = document.getElementById('song-lyrics');
+    if (!container) return;
+    const lines = this.currentSong.lines;
+    if (!lines || lines.length === 0) {
+      container.innerHTML = '<div class="card" style="text-align:center;padding:var(--space-8);background:var(--color-bg-alt)"><div style="font-size:3rem;margin-bottom:var(--space-4)">🎵</div><p style="color:var(--color-text-secondary)">Bu şarkının sözleri yakında eklenecek!</p></div>';
+      return;
+    }
+    container.innerHTML = lines.map(line => {
+      if (lang === 'en') return '<div class="lyric-line"><div class="lyric-en">' + line.en + '</div></div>';
+      if (lang === 'tr') return '<div class="lyric-line"><div class="lyric-en" style="color:var(--color-text)">' + line.tr + '</div></div>';
+      return '<div class="lyric-line"><div class="lyric-en">' + line.en + '</div><div class="lyric-tr">' + line.tr + '</div></div>';
+    }).join('');
+  },
+
+  startSongQuiz() {
+    const song = this.currentSong;
+    if (!song || !song.quiz || song.quiz.length === 0) return;
+    SoundEngine.click();
+    this.songQuizState = {
+      song,
+      questions: [...song.quiz].sort(() => Math.random() - 0.5),
+      currentIdx: 0,
+      score: 0,
+      correct: 0,
+      wrong: 0,
+      answered: false,
+      startTime: Date.now()
+    };
+    document.getElementById('song-quiz-content').classList.remove('hidden');
+    document.getElementById('song-quiz-result').classList.add('hidden');
+    this.showScreen('song-quiz');
+  },
+
+  renderSongQuiz() {
+    const sq = this.songQuizState;
+    if (!sq || !sq.questions || !sq.questions[sq.currentIdx]) return;
+    const q = sq.questions[sq.currentIdx];
+    document.getElementById('song-quiz-content').classList.remove('hidden');
+    document.getElementById('song-quiz-result').classList.add('hidden');
+    document.getElementById('song-quiz-title').textContent = '🎵 ' + sq.song.title;
+    document.getElementById('song-quiz-counter').textContent = (sq.currentIdx + 1) + ' / ' + sq.questions.length;
+    document.getElementById('song-quiz-score').textContent = sq.score;
+    document.getElementById('song-quiz-tr-line').textContent = '🇹🇷 ' + q.tr;
+    document.getElementById('song-quiz-en-line').textContent = '🎵 ' + q.display;
+    document.getElementById('song-quiz-feedback').innerHTML = '';
+    document.getElementById('song-quiz-next').classList.add('hidden');
+    document.getElementById('song-quiz-progress').style.width = ((sq.currentIdx / sq.questions.length) * 100) + '%';
+    const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+    sq._shuffled = shuffled;
+    document.getElementById('song-quiz-options').innerHTML = shuffled.map((opt, i) =>
+      '<div class="card-option" id="sopt-' + i + '" onclick="App.selectSongAnswer(' + i + ')">' + opt + '</div>'
+    ).join('');
+    sq.answered = false;
+    setTimeout(() => SoundEngine.speak(q.tr), 300);
+  },
+
+  selectSongAnswer(idx) {
+    const sq = this.songQuizState;
+    if (!sq || sq.answered) return;
+    sq.answered = true;
+    SoundEngine.click();
+    const q = sq.questions[sq.currentIdx];
+    const word = sq._shuffled[idx];
+    const isCorrect = word === q.correct;
+    sq._shuffled.forEach((opt, i) => {
+      const el = document.getElementById('sopt-' + i);
+      if (!el) return;
+      el.classList.add('disabled');
+      if (opt === q.correct) el.classList.add('correct');
+      if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+    if (isCorrect) {
+      sq.score += 10;
+      sq.correct++;
+      SoundEngine.correct();
+      this.showConfetti();
+      this.showPointsFloat(10);
+      const msg = ENCOURAGEMENTS_CORRECT[Math.floor(Math.random() * ENCOURAGEMENTS_CORRECT.length)];
+      document.getElementById('song-quiz-feedback').innerHTML = '<div class="feedback-message correct">' + msg + ' +10</div>';
+      document.getElementById('song-quiz-score').textContent = sq.score;
+      setTimeout(() => SoundEngine.speakEnglish(q.correct), 500);
+    } else {
+      sq.wrong++;
+      SoundEngine.wrong();
+      document.getElementById('song-quiz-feedback').innerHTML = '<div class="feedback-message wrong">Doğrusu: <strong>"' + q.correct + '"</strong> 💡</div>';
+    }
+    document.getElementById('song-quiz-next').classList.remove('hidden');
+  },
+
+  nextSongQuestion() {
+    const sq = this.songQuizState;
+    if (!sq) return;
+    SoundEngine.click();
+    sq.currentIdx++;
+    if (sq.currentIdx >= sq.questions.length) {
+      this.finishSongQuiz();
+    } else {
+      this.renderSongQuiz();
+    }
+  },
+
+  finishSongQuiz() {
+    const sq = this.songQuizState;
+    SoundEngine.levelUp();
+    this.showConfetti();
+    if (this.currentProfile) {
+      ProgressManager.addPoints(this.currentProfile.id, sq.score);
+      this.currentProfile = ProgressManager.getProfile(this.currentProfile.id);
+    }
+    const pct = sq.correct / sq.questions.length;
+    const stars = pct >= 0.9 ? 3 : pct >= 0.6 ? 2 : pct >= 0.3 ? 1 : 0;
+    document.getElementById('song-quiz-content').classList.add('hidden');
+    document.getElementById('song-quiz-result').classList.remove('hidden');
+    document.getElementById('song-result-emoji').textContent = sq.song.coverEmoji;
+    document.getElementById('song-result-title').textContent = stars >= 2 ? '🎉 Harika!' : '💪 İyi Deneme!';
+    document.getElementById('song-result-song-name').textContent = sq.song.title;
+    document.getElementById('song-result-stars').textContent = [1,2,3].map(i => i <= stars ? '⭐' : '☆').join('');
+    document.getElementById('song-result-score').textContent = sq.score;
+    document.getElementById('song-result-correct').textContent = sq.correct;
+    document.getElementById('song-result-wrong').textContent = sq.wrong;
+  },
+
+  quitSongQuiz() {
+    SoundEngine.click();
+    this.showScreen('song-player');
   }
 };
 

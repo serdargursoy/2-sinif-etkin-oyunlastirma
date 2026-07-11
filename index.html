@@ -153,6 +153,15 @@
            <div style="font-size: 3rem;">📖</div>
         </div>
 
+        <!-- Songs Module Card -->
+        <div class="card bounce-hover" style="background: linear-gradient(135deg, #FFF0F9, #FCE4F6); border: 2px solid #F9A8D4; padding: var(--space-4); margin-bottom: var(--space-6); display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="App.openSongsList()">
+           <div>
+              <h4 style="color: #BE185D; margin-bottom: 4px; font-size: var(--text-lg)">🎵 Şarkılarla Öğren</h4>
+              <p style="font-size: var(--text-sm); color: #DB2777;">İngilizce şarkıları söyle, sözleri öğren! 🎤</p>
+           </div>
+           <div style="font-size: 3rem;">🎤</div>
+        </div>
+
         <!-- Study Plan / Recommendations -->
         <div id="dash-study-plan-container" class="hidden" style="margin: var(--space-6) auto; max-width: 600px;">
            <div class="card" style="background: linear-gradient(135deg, #FFF, #F0F9FF); border: 2px solid #BAE6FD; padding: var(--space-4); position: relative; overflow: visible;">
@@ -550,6 +559,117 @@
       </div>
     </div>
 
+    <!-- ========== SONGS LIST SCREEN ========== -->
+    <div id="screen-songs-list" class="screen">
+      <div class="container" style="max-width:800px;width:100%">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.goToDashboard()">← Ana Sayfa</button>
+        </div>
+        <div class="text-center" style="margin-bottom:var(--space-6)">
+          <div style="font-size:4rem;margin-bottom:var(--space-2)">🎵</div>
+          <h2>Şarkılarla Öğren</h2>
+          <p style="color:var(--color-text-secondary)">Şarkıyı dinle, sözleri öğren, quizi kazan! 🎤</p>
+        </div>
+        <div id="songs-grid" class="grid grid-2 gap-4 stagger-children"></div>
+        <div class="text-center" style="margin-top:var(--space-8)">
+          <button class="btn btn-ghost" onclick="App.goToDashboard()">← Ana Sayfaya Dön</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SONG PLAYER SCREEN ========== -->
+    <div id="screen-song-player" class="screen">
+      <div class="container" style="max-width:700px;width:100%;padding-top:0">
+        <div class="top-bar">
+          <button class="back-btn" onclick="App.showScreen('songs-list')">← Geri</button>
+          <div style="text-align:center;flex:1;font-family:var(--font-display);font-weight:600;font-size:var(--text-base)" id="song-player-title">Şarkı</div>
+          <div style="width:60px"></div>
+        </div>
+
+        <div id="song-youtube-wrapper" class="youtube-wrapper" style="margin-bottom:var(--space-4)"></div>
+
+        <div class="flex justify-center gap-2" style="margin-bottom:var(--space-4)">
+          <button id="song-lang-both" class="btn btn-primary btn-sm" onclick="App.setSongLang('both')">TR + EN</button>
+          <button id="song-lang-en" class="btn btn-ghost btn-sm" onclick="App.setSongLang('en')">English</button>
+          <button id="song-lang-tr" class="btn btn-ghost btn-sm" onclick="App.setSongLang('tr')">Türkçe</button>
+        </div>
+
+        <div id="song-lyrics" class="lyrics-container" style="margin-bottom:var(--space-6)"></div>
+
+        <div style="margin-bottom:var(--space-8)">
+          <button id="song-quiz-btn" class="btn btn-primary btn-lg w-full shimmer" onclick="App.startSongQuiz()">🎯 Quiz Yap!</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SONG QUIZ SCREEN ========== -->
+    <div id="screen-song-quiz" class="screen">
+      <div class="container" style="max-width:700px;width:100%;padding-top:0">
+
+        <!-- Quiz Content -->
+        <div id="song-quiz-content">
+          <div class="top-bar">
+            <button class="back-btn" onclick="App.quitSongQuiz()">✕ Çık</button>
+            <div style="text-align:center;flex:1">
+              <div id="song-quiz-title" style="font-family:var(--font-display);font-weight:600">🎵 Şarkı Quizi</div>
+            </div>
+            <div class="stats">
+              <div class="stat-item"><span class="stat-icon">⭐</span><span id="song-quiz-score">0</span></div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:var(--space-4)">
+            <div class="flex justify-between items-center" style="margin-bottom:var(--space-2)">
+              <span id="song-quiz-counter" class="question-counter">1 / 6</span>
+            </div>
+            <div class="progress-bar small">
+              <div class="progress-fill" id="song-quiz-progress" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div class="question-area">
+            <div id="song-quiz-tr-line" style="text-align:center;color:var(--color-text-secondary);font-size:var(--text-base);margin-bottom:var(--space-3);font-style:italic;padding:var(--space-2) var(--space-4);background:var(--color-bg-alt);border-radius:var(--radius-lg);">🇹🇷 Türkçesi...</div>
+            <div id="song-quiz-en-line" class="question-text">🎵 ___</div>
+            <div id="song-quiz-options" class="options-grid" style="margin-top:var(--space-4)"></div>
+            <div id="song-quiz-feedback" style="margin-top:var(--space-3)"></div>
+            <div class="text-center" style="margin-top:var(--space-4)">
+              <button id="song-quiz-next" class="btn btn-primary btn-lg hidden" onclick="App.nextSongQuestion()">Sonraki →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quiz Result -->
+        <div id="song-quiz-result" class="hidden" style="text-align:center;padding:var(--space-8) var(--space-4)">
+          <div id="song-result-emoji" style="font-size:5rem;margin-bottom:var(--space-4)">⭐</div>
+          <h1 id="song-result-title" style="margin-bottom:var(--space-2)">🎉 Harika!</h1>
+          <p id="song-result-song-name" style="color:var(--color-text-secondary);margin-bottom:var(--space-4)">Şarkı</p>
+          <div id="song-result-stars" style="font-size:2.5rem;margin-bottom:var(--space-6)">⭐⭐⭐</div>
+          <div class="card" style="margin-bottom:var(--space-6)">
+            <div class="grid grid-3 gap-4" style="text-align:center">
+              <div>
+                <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">Toplam Puan</div>
+                <div style="font-size:var(--text-2xl);font-weight:800;color:var(--color-gold)" id="song-result-score">0</div>
+              </div>
+              <div>
+                <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">✅ Doğru</div>
+                <div style="font-size:var(--text-2xl);font-weight:800;color:var(--color-emerald)" id="song-result-correct">0</div>
+              </div>
+              <div>
+                <div style="font-size:var(--text-sm);color:var(--color-text-secondary)">❌ Yanlış</div>
+                <div style="font-size:var(--text-2xl);font-weight:800;color:var(--color-coral)" id="song-result-wrong">0</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3">
+            <button class="btn btn-primary btn-lg w-full" onclick="App.startSongQuiz()">🔄 Tekrar Dene</button>
+            <button class="btn btn-ghost w-full" onclick="App.showScreen('song-player')">🎵 Şarkıya Dön</button>
+            <button class="btn btn-ghost w-full" onclick="App.showScreen('songs-list')">📋 Şarkı Listesi</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ========== MODALS ========== -->
 
     <!-- Avatar Editor Modal -->
@@ -597,6 +717,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="js/data/songs.js"></script>
   <script src="js/data/math-questions.js"></script>
   <script src="js/data/english-questions.js"></script>
   <script src="js/data/turkish-questions.js"></script>
